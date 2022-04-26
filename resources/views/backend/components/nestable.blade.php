@@ -12,14 +12,14 @@ function showCategory($groups, $module, $parent_id = null)
         if ($item->parent_id == $parent_id) {
             // Xử lý hiển thị chuyên mục
             echo '<li class="dd-item" data-id="' . $item->id . '">
-                 <div class="dd-handle"><input type="checkbox"
+                 <div class="dd-handle">
+                 <input type="checkbox"
                         id="master-' . $item->id . '"
                          class="sub_chk-' . $parent_id . ' checkbox_category"
-                           onclick="selectAllChild(' . $item->id . ')"
-                            onmousedown="disabledEventPropagation(event)"
+                           onclick="selectAllChild('. $item->id . ')"
                             data-id="' . $item->id . '"
                             style="margin-right:10px">' . $item->title . '
-                    <div style="position:absolute;right:2rem;top:15%" onmousedown="disabledEventPropagation(event)" id="button_acction-' . $item->id . '">
+                    <div style="position:absolute;right:2rem;top:.3rem" id="button_acction-' . $item->id . '">
                     <form method="post" action="' . route("$module.destroy", $item) . '">
                     ' . csrf_field() . '
                     ' . method_field('delete') . '

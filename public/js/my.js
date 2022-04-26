@@ -1,11 +1,3 @@
-function disabledEventPropagation(event) {
-    if (event.stopPropagation) {
-        event.stopPropagation();
-    } else if (window.event) {
-        window.event.cancelBubble = true;
-    }
-}
-
 window.dataLayer = window.dataLayer || [];
 
 function gtag() {
@@ -26,12 +18,7 @@ gtag('js', new Date());
 
 gtag('config', 'AW-607164289');
 
-function setShowBtnAction(status) {
-    if(status){
-        $('#expand-all').hide();
-        $('#collapse-all').show();
-    }else{
-        $('#expand-all').show();
-        $('#collapse-all').hide();
-    }
+function setShowBtnAction() {
+        $('#expand-all').toggle();
+        $('#collapse-all').toggle();
 }

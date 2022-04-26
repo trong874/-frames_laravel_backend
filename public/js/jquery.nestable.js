@@ -87,6 +87,9 @@
             var onStartEvent = function(e)
             {
                 var handle = $(e.target);
+                if (handle[0].tagName === "INPUT"){
+                    return;
+                }
                 if (!handle.hasClass(list.options.handleClass)) {
                     if (handle.closest('.' + list.options.noDragClass).length) {
                         return;

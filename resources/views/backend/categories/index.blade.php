@@ -13,9 +13,9 @@
                             <div class="col-lg-12">
                                 <div class="row" style="margin: 20px;float: right">
                                     <button type="button" class="btn btn-primary"
-                                            data-action="expand-all" id="expand-all" onclick="setShowBtnAction(true)" style="display: none">{{__('Mở rộng')}}</button>
+                                            data-action="expand-all" id="expand-all" onclick="setShowBtnAction()" style="display: none">{{__('Mở rộng')}}</button>
                                     <button type="button" class="btn btn-primary"
-                                            data-action="collapse-all" id="collapse-all" onclick="setShowBtnAction(false)">{{__('Thu gọn')}}
+                                            data-action="collapse-all" id="collapse-all" onclick="setShowBtnAction()">{{__('Thu gọn')}}
                                     </button>
 
                                     <button type="button" class="btn btn-danger" data-toggle="modal"
@@ -71,11 +71,30 @@
 @section('scripts')
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
     <script src="{{asset('js/my.js')}}"></script>
+    <script src="{{asset('js/pages/features/miscellaneous/toastr.js')}}"></script>
     <script src="{{asset('js/jquery.nestable.js')}}"></script>
     <script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "300",
+            "timeOut": "2500",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
         var token_jwt = localStorage.getItem('token_jwt');
         $(document).ready(function () {
-            var updateOutput = function (e) {
+            let first_unit = true;
+            function updateOutput(e) {
                 var list = e.length ? e : $(e.target),
                     output = list.data('output');
                 if (window.JSON) {
@@ -93,17 +112,23 @@
                         list: list.nestable('serialize'),
                     },
                     success:function (res) {
-                        console.log(res);
+                        if(first_unit){
+                            first_unit = !first_unit;
+                        }else {
+                            toastr.success(res);
+                        }
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.log(errorThrown)
                 });
-            };
+            }
             // activate Nestable for list 1
-            $('#nestable').nestable({
-                group: 1
-            })
-                .on('change', updateOutput);
+            $('#nestable').nestable()
+                .on('change', function (e) {
+                    if(e.target.tagName !== 'INPUT'){
+                        updateOutput(e)
+                    }
+                });
 
             updateOutput($('#nestable').data('output', $('#nestable-output')));
             $('#nestable-menu').on('click', function (e) {
@@ -116,8 +141,6 @@
                     $('.dd').nestable('collapseAll');
                 }
             });
-
-            $('#nestable3').nestable();
 
         });
 
