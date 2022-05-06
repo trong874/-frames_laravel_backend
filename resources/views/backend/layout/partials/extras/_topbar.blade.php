@@ -113,7 +113,7 @@
         <div class="dropdown">
             <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
                 <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
-                    <img class="h-20px w-20px rounded-sm" src="{{ asset('media/svg/flags/226-united-states.svg') }}" alt=""/>
+                    <img class="h-20px w-20px rounded-sm" src="{{ asset('media/svg/flags/220-vietnam.svg') }}" alt=""/>
                 </div>
             </div>
 
@@ -128,10 +128,10 @@
         @if (config('layout.extras.user.layout') == 'offcanvas')
             <div class="topbar-item">
                 <div class="btn btn-icon w-auto btn-clean d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
-                    <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
+                    <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Xin chào ,</span>
                     <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{{@Auth::user()->username}}</span>
                     <span class="symbol symbol-35 symbol-light-success">
-                        <img src="{{Auth::user()->image ?? asset('media/users/default.jpg')}}" alt="avatar image">
+                        <img src="{{Auth::user()->image ?? 'https://ui-avatars.com/api/?name='.auth()->user()->username.'&color=FF00FF&background=EBF4FF ' }}" alt="avatar image">
                     </span>
                 </div>
             </div>

@@ -45,9 +45,9 @@
                                     multiple="multiple">
                                 <optgroup label="Chọn danh mục">
                                     @if(isset($item))
-                                        {{showOldCategories($categories,$item)}}
+                                        {{ get_option_old_categories($categories,$item)}}
                                     @else
-                                        {{showCategories($categories)}}
+                                        {{ get_option_categories($categories)}}
                                     @endif
                                 </optgroup>
                             </select>
@@ -220,21 +220,6 @@
                                     động
                                 </option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày tạo</label>
-                            <?php date_default_timezone_set('Asia/Ho_Chi_Minh') ?>
-                            <div class="input-group date" id="kt_datetimepicker_create" data-target-input="nearest">
-                                <input type="text" name="created_at" class="form-control datetimepicker-input"
-                                       value="{{$item->created_at ?? date('d/m/Y H:i:s')}}"
-                                       data-target="#kt_datetimepicker_create" data-toggle="datetimepicker">
-                                <div class="input-group-append" data-target="#kt_datetimepicker_create"
-                                     data-toggle="datetimepicker">
-															<span class="input-group-text">
-																<i class="ki ki-calendar"></i>
-															</span>
-                                </div>
-                            </div>
                         </div>
                         <div class="form-group">
                             <label>Ngày hết hạn</label>
@@ -461,45 +446,6 @@
 
     <!--end::Form-->
     <!--end::Card-->
-    <?php
-    function showOldCategories($categories, $current_data, $parent_id = null, $char = ' ')
-    {
-        $flag = false;
-        foreach ($categories as $key => $item) {
-            // Nếu là chuyên mục con thì hiển thị
-            if ($item->parent_id == $parent_id) {
-                foreach ($current_data->groups as $group) {
-                    if ($item->id == $group->id) {
-                        echo ' <option value="' . $item->id . '" selected>
-                                   ' . $char . $item->title . '
-                                </option>';
-                        $flag = true;
-                    }
-                }
-                if ($flag) {
-                    showOldCategories($categories, $current_data, $item->id, $char . '__');
-                } else {
-                    echo ' <option value="' . $item->id . '">
-                                   ' . $char . $item->title . '
-                                </option>';
-                    showOldCategories($categories, $current_data, $item->id, $char . '__');
-                }
-            }
-        }
-    }
-
-    function showCategories($categories, $parent_id = null, $char = ' ')
-    {
-        foreach ($categories as $key => $item) {
-            // Nếu là chuyên mục con thì hiển thị
-            if ($item->parent_id == $parent_id) {
-                echo '<option value="' . $item->id . '">' . $char . $item->title . '</option>';
-                // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
-                showCategories($categories, $item->id, $char . '__');
-            }
-        }
-    }
-    ?>
 @endsection
 @section('scripts')
     <script src="{{asset('js/form-data-item.js')}}"></script>
@@ -513,14 +459,7 @@
 
     @if(Session::has('message'))
         <script>
-            $(document).ready(function () {
-                Swal.fire({
-                    icon: "success",
-                    title: "{{Session::pull('message')}}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            })
+            toastr.success("{{session()->pull('message')}}");
         </script>
     @endif
     <script>

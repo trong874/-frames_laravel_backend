@@ -6,8 +6,8 @@
 	{{-- Header --}}
 	<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
 		<h3 class="font-weight-bold m-0">
-			User Profile
-			<small class="text-muted font-size-sm ml-2">12 messages</small>
+			Thông tin người dùng
+{{--			<small class="text-muted font-size-sm ml-2">12 messages</small>--}}
 		</h3>
 		<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_user_close">
 			<i class="ki ki-close icon-xs text-muted"></i>
@@ -19,7 +19,7 @@
 		{{-- Header --}}
         <div class="d-flex align-items-center mt-5">
             <div class="symbol symbol-100 mr-5">
-                <div class="symbol-label" style="background-image:url('{{ Auth::user()->image ?? asset('media/users/default.jpg')}}')"></div>
+                <div class="symbol-label" style="background-image:url('{{ auth()->user()->image ?? 'https://ui-avatars.com/api/?name='.auth()->user()->username.'&color=7F9CF5&background=EBF4FF '}}')"></div>
 				<i class="symbol-badge bg-success"></i>
             </div>
             <div class="d-flex flex-column">
@@ -33,7 +33,7 @@
 								{{ Metronic::getSVG("media/svg/icons/Communication/Mail-notification.svg", "svg-icon-lg svg-icon-primary") }}
 							</span>
                             <span class="navi-text text-muted text-hover-primary"> {{@Auth::user()->email}}</span>
-                            <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5" id="submit_logout">Sign Out</a>
+                            <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5" id="submit_logout">Đăng xuất</a>
                         </span>
                     </a>
                 </div>
@@ -49,49 +49,26 @@
 		        <div class="navi-link">
 		            <div class="symbol symbol-40 bg-light mr-3">
 		                <div class="symbol-label">
-							{{ Metronic::getSVG("media/svg/icons/General/Notification2.svg", "svg-icon-md svg-icon-success") }}
+							{{ Metronic::getSVG("media/svg/icons/General/User.svg", "svg-icon-md svg-icon-success") }}
 						</div>
 		            </div>
 		            <div class="navi-text">
 		                <div class="font-weight-bold">
-		                    My Profile
+		                    Thông tin tài khoản
 		                </div>
 		                <div class="text-muted">
-		                    Account settings and more
-		                    <span class="label label-light-danger label-inline font-weight-bold">update</span>
+		                    Xem và cập nhật thông tin
+		                    <span class="label label-light-danger label-inline font-weight-bold">cập nhật</span>
 		                </div>
 		            </div>
 		        </div>
 		    </a>
-
 		</div>
 
 		{{-- Separator --}}
 		<div class="separator separator-dashed my-7"></div>
-
-		{{-- Notifications --}}
-		<div>
-			{{-- Heading --}}
-        	<h5 class="mb-5">
-            	Recent Notifications
-        	</h5>
-
-			{{-- Item --}}
-	        <div class="d-flex align-items-center bg-light-warning rounded p-5 gutter-b">
-	            <span class="svg-icon svg-icon-warning mr-5">
-	                {{ Metronic::getSVG("media/svg/icons/Home/Library.svg", "svg-icon-lg") }}
-	            </span>
-
-	            <div class="d-flex flex-column flex-grow-1 mr-2">
-	                <a href="#" class="font-weight-normal text-dark-75 text-hover-primary font-size-lg mb-1">Another purpose persuade</a>
-	                <span class="text-muted font-size-sm">Due in 2 Days</span>
-	            </div>
-
-	            <span class="font-weight-bolder text-warning py-1 font-size-lg">+28%</span>
-	        </div>
-		</div>
     </div>
 </div>
-<form action="{{route('logout')}}" method="POST" id="form_logout">
+<form action="{{ route('logout') }}" method="POST" id="form_logout">
     @csrf
 </form>

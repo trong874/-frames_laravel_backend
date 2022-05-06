@@ -7,10 +7,10 @@ use App\Http\Controllers\Backend\PagesController;
 use App\Http\Controllers\Backend\SettingController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin')->middleware(['auth'])->group(function (){
+Route::prefix('admin')->middleware(['auth','is_admin'])->group(function (){
     Route::get('/',function (){return redirect('/admin/dashboard');});
 
-    Route::get('/dashboard',[PagesController::class,'index'])->name('dashboard');
+    Route::get('/dashboard',[PagesController::class,'index'])->name('admin.index');
 
     Route::resource('article', ItemController::class);
 
@@ -20,6 +20,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function (){
 
     Route::resource('setting',SettingController::class);
 
+    Route::get('filter-item',[ItemController::class,'filterItem'])->name('filter-item');
+
     Route::get('duplicate-item/{id}', [ItemController::class, 'duplicateItem'])->name('duplicate-item');
 
     Route::get('get-item/{module}', [ItemController::class, 'ajaxGetItem'])->name('ajax_get_item');
@@ -28,4 +30,5 @@ Route::prefix('admin')->middleware(['auth'])->group(function (){
 
 });
 
+require __DIR__.'/jetstream.php';
 require __DIR__.'/auth.php';

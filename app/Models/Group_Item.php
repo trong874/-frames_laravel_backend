@@ -9,4 +9,5 @@ class Group_Item extends Model
 {
     use HasFactory;
     protected $table = 'groups_items';
+    protected $fillable = ['order'];
 }

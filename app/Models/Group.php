@@ -55,6 +55,9 @@ class Group extends Model
     function items(){
         return $this->belongsToMany(Item::class,'groups_items','group_id','item_id')->orderBy('items.order','DESC');
     }
+    function itemsChild(){
+        return $this->belongsToMany(Item::class,'groups_items','group_id','item_id')->orderBy('groups_items.order','ASC');
+    }
     function groups(){
         return $this->hasMany(Group::class,'parent_id','id')->orderBy('order','ASC');
     }

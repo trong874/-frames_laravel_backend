@@ -46,6 +46,11 @@
             {{ Metronic::printAttrs('aside_menu') }}>
 
             <ul class="menu-nav {{ Metronic::printClasses('aside_menu_nav', false) }}">
+                <div class="container">
+                    <div class="input-group input-group-sm mb-3">
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Tìm kiếm" id="keyword">
+                    </div>
+                </div>
                 {{ Menu::renderVerMenu(config('menu_aside.items')) }}
             </ul>
         </div>

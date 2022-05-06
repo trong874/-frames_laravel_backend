@@ -71,26 +71,11 @@
 @section('scripts')
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
     <script src="{{asset('js/my.js')}}"></script>
-    <script src="{{asset('js/pages/features/miscellaneous/toastr.js')}}"></script>
     <script src="{{asset('js/jquery.nestable.js')}}"></script>
     <script>
-        toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "300",
-            "timeOut": "2500",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
+        @if(session()->has('message'))
+            toastr.info('{{ session()->pull('message') }}')
+         @endif
         var token_jwt = localStorage.getItem('token_jwt');
         $(document).ready(function () {
             let first_unit = true;

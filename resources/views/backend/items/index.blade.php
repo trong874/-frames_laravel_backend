@@ -9,6 +9,75 @@
     <![endif]-->
 @endsection
 @section('content')
+    <div class="card card-custom mb-4">
+        <div class="card-header">
+            <h2 class="card-title">
+                Tìm kiếm
+            </h2>
+        </div>
+        <div class="card-body">
+            <form action="" id="form-search">
+                <input type="hidden" name="module" value="{{$module}}">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group container">
+                            <span class="form-label">ID</span>
+                            <input type="text" name="id" class="form-control" placeholder="Nhập ID" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group container">
+                            <span class="form-label">Tiêu đề</span>
+                            <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group container">
+                            <span class="form-label">Danh mục</span>
+                            <select class="form-control select2" id="category_id" name="category_id">
+                                <option label="Label"></option>
+                                <?php get_option_categories($categories)  ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group container">
+                            <span class="form-label">Vị trí</span>
+                            <input name="position" class="form-control" type="text" placeholder="Vị trí ( Position )">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group container">
+                            <span class="form-label">Trạng thái</span>
+                            <select class="form-control" name="status">
+                                <option value="">-- Trạng thái --</option>
+                                <option value="1">Hoạt động</option>
+                                <option value="0">Ngưng hoạt động</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group container">
+                            <span class="form-label">Khoảng thời gian</span>
+                            <div class="input-daterange input-group" id="kt_datepicker_5">
+                                <input type="text" class="form-control" name="date_from" autocomplete="off" placeholder="Từ ngày">
+                                <div class="input-group-append"><span class="input-group-text"><i class="la la-ellipsis-h"></i></span></div>
+                                <input type="text" class="form-control" name="date_to" autocomplete="off" placeholder="Đến ngày">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="container">
+                            <button type="button" class="btn btn-success" id="submit-form-search">Tìm</button>
+                        </div>
+                    </div>
+                    <div class="col-md-19"></div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="card card-custom" id="kt_page_sticky_card">
         <div class="card-body">
             <!--begin: Datatable-->
@@ -88,95 +157,16 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     {{--    Notify--}}
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
+    <script src="{{asset('js/pages/crud/forms/widgets/select2.js')}}"></script>
+
     @if(Session::has('message'))
         <script>
-            $(document).ready(function () {
-                Swal.fire({
-                    icon: "success",
-                    title: "{{Session::pull('message')}}",
-                    showConfirmButton: false,
-                    timer: 750
-                });
-            })
+            toastr.success("{{session()->pull('message')}}");
         </script>
     @endif
     <!-- App scripts -->
     <script>
-        $(function () {
-            $('#kt_datatable').DataTable({
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('ajax_get_item',$module) !!}',
-                columns: [
-                    {
-                        data: null,
-                        title: '<label class="checkbox"><input type="checkbox"  id="master_chk" onclick="selectAllItem()"><span></span></label>',
-                        orderable: false, searchable: false,
-                        width: "20px",
-                        class: "ckb_item",
-                        render: function (data, type, row) {
-                            return '<label class="checkbox"><input type="checkbox" class="sub_chk" data-id="' + row.id + '">&nbsp<span></span></label>';
-
-                        }
-                    },
-                    {data: 'id', title: 'ID'},
-                    {data: 'title', title: 'Tiêu đề'},
-                    {
-                        data: null, title: 'Danh mục',
-                        render: function (data, type, row) {
-                            var temp = "";
-                            $.each(row.groups, function (index, value) {
-                                if (value.name == 'admin') {
-                                    temp += "<span class=\"label label-pill label-inline label-center mr-2  label-primary \">" + value.title + "</span><br />";
-                                } else {
-                                    temp += "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + value.title + "</span><br />";
-                                }
-
-                                // console.log( value.title);
-                            });
-                            return temp;
-                        }
-                    },
-                    {
-                        data: 'image', title: 'Hình ảnh', orderable: false, searchable: false,
-                        render: function (data, type, row) {
-                            if (row.image == "" || row.image == null) {
-                                return "<img class=\"image-item\" src=\"/media/demos/empty.jpg\" style=\"max-width: 40px;max-height: 40px\">";
-                            } else {
-                                return "<img class=\"image-item\" src=\"" + row.image + "\" style=\"max-width: 40px;max-height: 40px\">";
-                            }
-                        }
-                    },
-                    {data: 'order', title: 'Thứ tự'},
-                    {data: 'position', title: 'Vị trí'},
-                    {
-                        data: 'status', title: 'Trạng thái', render: function (data, type, row) {
-
-                            if (row.status == 1) {
-                                return "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + "Hoạt động" + "</span>";
-                            } else if (row.status == 2) {
-                                return "<span class=\"label label-pill label-inline label-center mr-2 label-warning \">" + "" + "</span>";
-                            } else {
-                                return "<span class=\"label label-pill label-inline label-center mr-2 label-danger \">" + "Ngừng hoạt động" + "</span>";
-                            }
-
-                        }
-                    },
-                    {data: 'created_at', title: 'Thời gian'},
-                    {
-                        data: null, title: 'Thao tác', orderable: false, searchable: false,
-                        render: function (data, type, row) {
-                            return '<a href="/admin/{{$module}}/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>' +
-                                '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteItem(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-trash\n"></i></span></button>' +
-                                '<a href="/admin/duplicate-item/'+row.id+'" class="btn btn-sm btn-clean btn-icon" title="Replicate">\n' +
-                                '<i class="far fa-copy"></i>\n' +
-                                '</a>';
-                        }
-                    }
-                ]
-            });
-        });
+        setDataTable({url:'{!! route('ajax_get_item',$module) !!}'})
 
         function deleteItem(item_id) {
             document.getElementById('form_delete').action = '/admin/{{$module}}/' + item_id;

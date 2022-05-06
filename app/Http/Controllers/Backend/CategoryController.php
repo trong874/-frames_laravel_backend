@@ -10,32 +10,42 @@ use Illuminate\Support\Facades\Session;
 class CategoryController extends Controller
 {
     protected $module;
+    protected $page_breadcrumbs;
 
     public function __construct(Request $request)
     {
         $this->module = $request->segment(2);
+        if( $this->module!="" && !$request->ajax()){
+            $this->page_breadcrumbs[] = [
+                'page' => route($this->module.'.index'),
+                'title' => __('Quản lý danh mục')
+            ];
+        }
     }
 
     public function index()
     {
-        $groups = Group::with('groups')
-            ->where('module', $this->module)
-            ->orderBy('order', 'ASC')
-            ->get(['id', 'title', 'parent_id']);
-        $nestable = view('backend.components.nestable',['module'=>$this->module,'groups' => $groups]);
+        $nestable = view('backend.components.nestable',['module'=>$this->module,'groups' => $this->getGroupsByModule()]);
         return view('backend.categories.index', [
             'page_title'=>'Category '.$this->module,
             'module' => $this->module,
-            'nestable'=>$nestable,]);
+            'nestable'=>$nestable,
+            'page_breadcrumbs'=>$this->page_breadcrumbs,
+            ]);
     }
 
     public function create()
     {
+        $this->page_breadcrumbs[] = [
+            'page' => '#',
+            'title' => __("Thêm mới")
+        ];
         $module = $this->module;
         return view('backend.categories.form-data', [
             'groups' => $this->getGroupsByModule(),
             'page_title' => 'Tạo mới danh mục ' . $module,
-            'module' => $module
+            'module' => $module,
+            'page_breadcrumbs'=>$this->page_breadcrumbs,
         ]);
     }
 
@@ -54,13 +64,18 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
+        $this->page_breadcrumbs[] = [
+            'page' => '#',
+            'title' => __("Chỉnh sửa")
+        ];
         $module = $this->module;
         $category = Group::findOrFail($id);
         return view('backend.categories.form-data', [
             'groups' => $this->getGroupsByModule(),
             'category'=>$category,
             'page_title' => 'Tạo mới danh mục ' . $module,
-            'module' => $module
+            'module' => $module,
+            'page_breadcrumbs'=>$this->page_breadcrumbs,
         ]);
     }
 
@@ -68,6 +83,7 @@ class CategoryController extends Controller
     {
         $data_category = $request->all();
         $category = Group::findOrFail($id);
+
         $category->update([
             'title'=>$data_category['title'],
             'slug'=>$data_category['slug'],
@@ -93,13 +109,25 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-
+        try {
+            Group::destroy($id);
+            $is_destroy = Group::query()->find($id);
+            if (!$is_destroy){
+                \session()->put('message','Đã xoá danh mục: '. $id);
+            }else {
+                \session()->put('message','Lỗi chưa xác định');
+            }
+            return back();
+        }catch (\Exception $e){
+            return $e;
+        }
     }
 
     public function getGroupsByModule()
     {
-        $module = $this->module;
-        return Group::where('module',$module)->get(['id', 'title']);
+        return Group::with(['groups'=>function($q){
+            $q->where('module',$this->module);
+        }])->where('module',$this->module)->orderBy('order','ASC')->get(['id', 'title','parent_id']);
     }
 
     public function destroyMulti(Request $request)

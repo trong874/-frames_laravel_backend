@@ -3,8 +3,9 @@ var KTSelect2 = function() {
     // Private functions
     var demos = function() {
         // basic
-        $('#kt_select2_1, #kt_select2_1_validate').select2({
-            placeholder: 'Select a state'
+        $('#kt_select2_1, #kt_select2_1_validate,#category_id').select2({
+            placeholder: 'Select a state',
+            allowClear: true
         });
 
         // nested

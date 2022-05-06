@@ -270,11 +270,14 @@ return [
             'plugins/global/plugins.bundle.css',
             'plugins/custom/prismjs/prismjs.bundle.css',
             'css/style.bundle.css',
+            '/css/override.css',
         ],
         'js' => [
             'plugins/global/plugins.bundle.js',
             'plugins/custom/prismjs/prismjs.bundle.js',
             'js/scripts.bundle.js',
+            '/js/pages/features/miscellaneous/toastr.js',
+            '/js/my.js',
         ],
     ],
 

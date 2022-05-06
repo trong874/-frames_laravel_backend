@@ -4,6 +4,7 @@
 @endsection
 @section('styles')
     <link rel="stylesheet" href="{{asset('plugins/custom/datatables/datatables.bundle.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/custom/nestable/nestable.css')}}">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -77,18 +78,16 @@
                         <input type="text" class="form-control" data-group_id="" id="input_search_item_group"
                                oninput="searchItem(this.value,this.getAttribute('data-group_id'))">
                     </div>
-                    <div id="result_data">
+                    <div id="result_data"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dd" id="nestable">
+                                <ol class="dd-list">
+
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                    <table class="table table-bordered table-hover table-checkable">
-                        <thead>
-                        <th>ID</th>
-                        <th>Tiêu đề</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                        </thead>
-                        <tbody id="table_item_in_group">
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -129,15 +128,13 @@
 
     {{--    Notify--}}
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
+    <script src="{{asset('js/jquery.nestable.js')}}"></script>
+    <script src="{{ asset('js/pages/features/miscellaneous/toastr.js') }}"></script>
+    <script src="{{asset('js/my.js')}}"></script>
     @if(Session::has('message'))
         <script>
             $(document).ready(function () {
-                Swal.fire({
-                    icon: "success",
-                    title: "{{Session::pull('message')}}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                toastr.success('{{ session()->pull('message') }}')
             })
         </script>
     @endif
@@ -205,7 +202,7 @@
                     },
                     {data: 'created_at', title: 'Thời gian'},
                     {
-                        data: null, title: 'Thao tác', orderable: false,class: 'backend-', searchable: false,
+                        data: null, title: 'Thao tác', orderable: false, class: 'backend-', searchable: false,
                         render: function (data, type, row) {
                             return '<a href="/admin/{{$module}}/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>' +
                                 '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#items_in_group" onclick="setItemInGroupModal(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-list-ul\n"></i></span></button>' +
@@ -215,7 +212,35 @@
                 ]
             });
         });
+        function updateOutput(e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data('output');
+            if (window.JSON) {
+                output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+            } else {
+                output.val('JSON browser support required for this demo.');
+            }
 
+            $.ajax({
+                url:"{{ route('index.change-order-in-group') }}",
+                type:'POST',
+                data: {
+                    list:list.nestable('serialize'),
+                    group_id: $('#input_search_item_group').attr('data-group_id'),
+                },
+                success: function (res) {
+                    toastr.success(res.message)
+                },
+                error: function (request, status, error) {
+                    console.log(request.responseText);
+                }
+            });
+        }
+
+        // Bấm modal lên phát set lại vị trí luôn
+        $(document).ready(function () {
+            $('#nestable').nestable().on('change', updateOutput);
+        });
         function searchItem(value, group_id) {
             $.ajax({
                 url: "{{route('items.search')}}",
@@ -247,7 +272,7 @@
                                 '        </div>\n' +
                                 '        <div class="d-flex align-items-center mt-lg-0 mt-3">\n' +
                                 '            <!--begin::Btn-->\n' +
-                                '            <button class="btn btn-icon btn-light btn-sm" id="btn_add_item" onclick="insertItemToGroup(' + item.id + ',' + group_id + ')">\n' +
+                                '            <button class="btn btn-icon btn-light btn-sm" onclick="insertItemToGroup(' + item.id + ',' + group_id + ')">\n' +
                                 '\t\t\t\t\t<span class="svg-icon svg-icon-success">\n' +
                                 '\t\t\t\t\t<span class="svg-icon svg-icon-md">\n' +
                                 '\t\t\t\t\t\t<img src="/media/svg/icons/Files/Import.svg"/>\n' +
@@ -276,37 +301,13 @@
                     },
                     success: function (res) {
                         if (res.error_message) {
-                            $(document).ready(function () {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: res.error_message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-                            })
+                            showToastError(res.message)
                         } else {
-                            $('#table_item_in_group').html('')
-                            let items_data = res.items;
-                            let status;
-                            items_data.forEach(function (item) {
-                                status = null;
-                                if (item.status == 1) {
-                                    status = "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + "Hoạt động" + "</span>";
-                                } else if (item.status == 2) {
-                                    status = "<span class=\"label label-pill label-inline label-center mr-2 label-warning \">" + "" + "</span>";
-                                } else {
-                                    status = "<span class=\"label label-pill label-inline label-center mr-2 label-danger \">" + "Ngừng hoạt động" + "</span>";
-                                }
-                                appenDataTable(status, item, group_id)
+                            $('#nestable .dd-list').html('')
+                            res.items.forEach(function (item) {
+                                appenDataTable(item, group_id)
                             })
-                            $(document).ready(function () {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: res.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-                            })
+                            toastr.success(res.message);
                         }
                     }
                 })
@@ -319,6 +320,7 @@
 
         function setItemInGroupModal(group_id) {
             $('#input_search_item_group').attr('data-group_id', group_id);
+            $('#result_data').html('')
             $(document).ready(function () {
                 $.ajax({
                     url: "{{route('get_item_in_group')}}",
@@ -330,20 +332,12 @@
                         group_id: group_id,
                     },
                     success: function (res) {
-                        $('#table_item_in_group').html('')
-                        let items_data = res;
-                        let status;
-                        items_data.forEach(function (item) {
-                            status = null;
-                            if (item.status == 1) {
-                                status = "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + "Hoạt động" + "</span>";
-                            } else if (item.status == 2) {
-                                status = "<span class=\"label label-pill label-inline label-center mr-2 label-warning \">" + "" + "</span>";
-                            } else {
-                                status = "<span class=\"label label-pill label-inline label-center mr-2 label-danger \">" + "Ngừng hoạt động" + "</span>";
-                            }
-                            appenDataTable(status, item, group_id)
-                        })
+                        $('#nestable .dd-list').html('')
+                        res.forEach(function (item) {
+                            appenDataTable(item, group_id)
+                        });
+                        // output initial serialised data
+                        updateOutput($('#nestable').data('output', $('#nestable-output')));
                     }
                 })
             })
@@ -362,70 +356,27 @@
                         item_id: item_id
                     },
                     success: function (res) {
-                        $('#table_item_in_group').html('')
-                        let status;
+                        $('#nestable .dd-list').html('')
                         res.items.forEach(function (item) {
-                            status = null;
-                            if (item.status == 1) {
-                                status = "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + "Hoạt động" + "</span>";
-                            } else if (item.status == 2) {
-                                status = "<span class=\"label label-pill label-inline label-center mr-2 label-warning \">" + "" + "</span>";
-                            } else {
-                                status = "<span class=\"label label-pill label-inline label-center mr-2 label-danger \">" + "Ngừng hoạt động" + "</span>";
-                            }
                             //append data
-                            appenDataTable(status, item, group_id)
+                            appenDataTable(item, group_id)
                         })
-                        $(document).ready(function () {
-                            Swal.fire({
-                                icon: "success",
-                                title: res.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        })
+                        showToastSuccess(res.message)
                     }
                 })
             })
         }
 
-        function appenDataTable(status, item, group_id) {
-            $('#table_item_in_group').append(
-                '  <tr>\n' +
-                '                            <td>' + item.id + '</td>\n' +
-                '                            <td>' + item.title + '</td>\n' +
-                '                            <td>' + status + '</td>\n' +
-                '                            <td>\n' +
-                '                                <button class="btn btn-icon btn-light btn-hover-primary btn-sm rachehe"\n' +
-                '                                        onclick="if (confirm(\'Xác nhận xoá item?\')){deleteItemInGroup(' + item.id + ',' + group_id + ')}">\n' +
-                '\t\t\t\t<span class="svg-icon svg-icon-md svg-icon-primary">\n' +
-                '\t\t\t\t\t\t<!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->\n' +
-                '\t\t\t\t\t\t<svg xmlns="http://www.w3.org/2000/svg"\n' +
-                '                             xmlns:xlink="http://www.w3.org/1999/xlink"\n' +
-                '                             width="24px" height="24px"\n' +
-                '                             viewBox="0 0 24 24"\n' +
-                '                             version="1.1">\n' +
-                '\t\t\t\t\t\t\t<g stroke="none"\n' +
-                '                               stroke-width="1" fill="none"\n' +
-                '                               fill-rule="evenodd">\n' +
-                '\t\t\t\t\t\t\t\t<rect x="0" y="0" width="24"\n' +
-                '                                      height="24"></rect>\n' +
-                '\t\t\t\t\t\t\t\t\t\t<path\n' +
-                '                                            d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"\n' +
-                '                                            fill="#000000"\n' +
-                '                                            fill-rule="nonzero"></path>\n' +
-                '\t\t\t\t\t\t\t\t\t\t<path\n' +
-                '                                            d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"\n' +
-                '                                            fill="#000000"\n' +
-                '                                            opacity="0.3"></path>\n' +
-                '                            </g>\n' +
-                '                        </svg>\n' +
-                '                    <!--end::Svg Icon-->\n' +
-                '                </span>\n' +
-                '                                </button>\n' +
-                '                            </td>\n' +
-                '                        </tr>'
-            )
+        function appenDataTable(item, group_id) {
+            let html = '';
+            html += `<li class="dd-item" data-id="${item.id}">`;
+            html += `<div class="dd-handle">${item.title}`;
+            html += `<div style="position:absolute;right:2rem;top:.3rem">`;
+            html += `<button class="btn btn-sm btn-danger" onclick="if (confirm('Xác nhận xoá item?')){deleteItemInGroup(${item.id},${group_id})}">Xoá</button>`;
+            html += `</div>`;
+            html += `</div>`;
+            html += `</li>`;
+            $('#nestable .dd-list').append(html);
         }
     </script>
     {{--    render button add--}}
@@ -466,12 +417,7 @@
                         ids: join_selected_values,
                     },
                     success: function (data) {
-                        Swal.fire({
-                            icon: "success",
-                            title: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+                        showToastSuccess(data.message)
                         setTimeout("location.reload(true);", 1000);
                     },
                     error: function (data) {

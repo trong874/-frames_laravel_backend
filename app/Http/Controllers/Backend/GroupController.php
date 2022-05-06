@@ -13,23 +13,37 @@ use Yajra\DataTables\DataTables;
 class GroupController extends Controller
 {
     protected $module;
+    protected $page_breadcrumbs;
 
     public function __construct(Request $request)
     {
         $this->module = $request->segment(2);
+        if( $this->module!="" && !$request->ajax()){
+            $this->page_breadcrumbs[] = [
+                'page' => route($this->module.'.index'),
+                'title' => __('Quản lý các nhóm')
+            ];
+        }
     }
 
     public function index()
     {
-        $module = $this->module;
-        return view('backend.groups.index',compact('module'));
+        return view('backend.groups.index',[
+            'module'=>$this->module,
+            'page_breadcrumbs'=>$this->page_breadcrumbs,
+        ]);
     }
 
     public function create()
     {
+        $this->page_breadcrumbs[] = [
+            'page' => '#',
+            'title' => __("Thêm mới"),
+        ];
         return view('backend.groups.form_data', [
-            'groups'=>$this->getGroupsByModule(),
+            'groups' => $this->getGroupsByModule(),
             'module' => $this->module,
+            'page_breadcrumbs'=>$this->page_breadcrumbs,
         ]);
     }
 
@@ -51,11 +65,16 @@ class GroupController extends Controller
 
     public function edit($group)
     {
+        $this->page_breadcrumbs[] = [
+            'page' => '#',
+            'title' => __("Chỉnh sửa"),
+        ];
         $group = Group::findOrFail($group);
         return view('backend.groups.form_data', [
             'groups' => $this->getGroupsByModule(),
             'module' => $this->module,
-            'group' => $group
+            'group' => $group,
+            'page_breadcrumbs'=>$this->page_breadcrumbs,
         ]);
     }
 
@@ -91,8 +110,8 @@ class GroupController extends Controller
         $group = Group::findOrFail($group_id);
         $items = $group->items;
         return response()->json([
-            'items'=>$items,
-            'message'=>'item có id '.$item_id.' đã được thêm vào group'
+            'items' => $items,
+            'message' => 'item có id ' . $item_id . ' đã được thêm vào group'
         ]);
     }
 
@@ -103,29 +122,31 @@ class GroupController extends Controller
         $group = Group::findOrFail($request->group_id);
         $items = $group->items;
         return response()->json([
-            'items'=>$items,
-            'message'=>'item có id '.$request->item_id.' đã bị xoá khỏi group'
+            'items' => $items,
+            'message' => 'item có id ' . $request->item_id . ' đã bị xoá khỏi group'
         ]);
     }
 
     public function getGroupsByModule()
     {
-        return Group::where('module', substr($this->module,0,-5).'category')->get(['id', 'title']);
+        return Group::where('module', substr($this->module, 0, -5) . 'category')->get(['id', 'title']);
     }
+
     public function ajaxGetGroup($module)
     {
-        $groups = Group::query()->with('group')->where('module',$module)->get([
-            'id', 'title', 'image','parent_id', 'order', 'position', 'status', 'created_at'
+        $groups = Group::query()->with('group')->where('module', $module)->get([
+            'id', 'title', 'image', 'parent_id', 'order', 'position', 'status', 'created_at'
         ]);
         return Datatables::of($groups)->make(true);
     }
 
     public function getItemInGroup(Request $request)
     {
-       $group_id = $request->group_id;
-       $group = Group::findOrFail($group_id);
-       $items = $group->items;
-       return response()->json($items);
+        $group_id = $request->group_id;
+        $group = Group::with(['itemsChild' => function ($q) {
+            $q->select('items.id', 'items.title');
+        }])->select('id')->findOrFail($group_id)->toArray();
+        return response()->json($group['items_child']);
     }
 
     public function destroyMulti(Request $request)
@@ -133,7 +154,7 @@ class GroupController extends Controller
         $ids = $request->ids;
         Group::whereIn('id', explode(",", $ids))->delete();
         return response()->json([
-            'message'=>"Đã xoá những item đã chọn !!"
+            'message' => "Đã xoá những item đã chọn !!"
         ]);
     }
 

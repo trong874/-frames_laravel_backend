@@ -23,3 +23,5 @@ Route::post('insert-item-to-group', [GroupController::class, 'addItemIntoGroup']
 Route::post('get-item-in-group', [GroupController::class, 'getItemInGroup'])->name('get_item_in_group');
 
 Route::post('delete-item-in-group', [GroupController::class, 'deleteItemInGroup'])->name('delete_item_in_group');
+
+Route::post('change-order-item-in-group',[ItemController::class,'changeOrderInGroup'])->name('index.change-order-in-group');

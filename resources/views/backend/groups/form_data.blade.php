@@ -215,21 +215,6 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Ngày tạo</label>
-                            <?php date_default_timezone_set('Asia/Ho_Chi_Minh') ?>
-                            <div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
-                                <input type="text" name="created_at" class="form-control datetimepicker-input"
-                                       value="{{$group->created_at ?? date('d/m/Y H:i:s') }}"
-                                       data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
-                                <div class="input-group-append" data-target="#kt_datetimepicker_1"
-                                     data-toggle="datetimepicker">
-															<span class="input-group-text">
-																<i class="ki ki-calendar"></i>
-															</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label>Ngày hết hạn</label>
                             <div class="input-group date" id="kt_datetimepicker_2" data-target-input="nearest">
                                 <input type="text" name="ended_at" class="form-control datetimepicker-input"
@@ -307,14 +292,7 @@
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
     @if(Session::has('message'))
         <script>
-            $(document).ready(function () {
-                Swal.fire({
-                    icon: "success",
-                    title: "{{Session::pull('message')}}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            })
+            toastr.success('{{ session()->pull('message') }}')
         </script>
     @endif
     <script>

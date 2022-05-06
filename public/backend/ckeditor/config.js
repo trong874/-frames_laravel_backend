@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -8,7 +8,6 @@ CKEDITOR.editorConfig = function( config ) {
     config.entities_greek = false;
     config.entities_latin = false;
     config.toolbar = [
-
         { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
         { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
         { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
@@ -21,14 +20,14 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'tools', items: [ 'Maximize' ] },
         // { name: 'editing', items: [ 'Scayt' ] }
     ];
-
     config.allowedContent = {
         $1: {
             // Use the ability to specify elements as an object.
             elements: CKEDITOR.dtd,
             attributes: true,
             styles: true,
-            classes: true
+            classes: true,
         }
     };
+    config.disallowedContent = 'script;*[on*];*{color*};span{display*};span{font*};img[width,height]{width*,height*}';
 };

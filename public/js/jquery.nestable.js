@@ -87,7 +87,7 @@
             var onStartEvent = function(e)
             {
                 var handle = $(e.target);
-                if (handle[0].tagName === "INPUT"){
+                if (handle[0].tagName !== "DIV"){
                     return;
                 }
                 if (!handle.hasClass(list.options.handleClass)) {

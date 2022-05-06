@@ -28,13 +28,14 @@ function showCategory($groups, $module, $parent_id = null)
                     </form>
                     </div>
                  </div>';
-            if (!empty($groups[$key]->groups[0])) {
+
+            if (isset($groups[$key]->groups[0])) {
                 echo ' <ol class="dd-list">';
-                showCategory($groups[$key]->groups, $module, $item->id);
+                showCategory($groups, $module, $item->id);
                 echo '</ol>';
-                }
-                echo '</li>';
             }
+            echo '</li>';
+        }
         }
     }
     ?>

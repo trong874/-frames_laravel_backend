@@ -41,12 +41,12 @@
                     <div class="form-group row mt-3">
                         <label class="col-lg-1 col-form-label text-right">Danh mục cha</label>
                         <div class="col-lg-6">
-                            <select class="form-control" name="group_id">
-                                <option value="">--Chọn danh mục--</option>
+                            <select class="form-control select2" id="category_id" name="group_id">
+                                <option label="Label"></option>
                                 @if(isset($category))
-                                    {{showOldCategories($groups,$category)}}
+                                    <?php get_option_old_parent_categories($groups,$category); ?>
                                 @else
-                                    {{showCategories($groups)}}
+                                    <?php get_option_categories($groups); ?>
                                 @endif
                             </select>
                         </div>
@@ -189,8 +189,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -208,18 +206,6 @@
                                 <option value="1" @if(@$category)@if($category->status == 1) selected @endif @endif>Hoạt động</option>
                                 <option value="0"  @if(@$category)@if($category->status == 0) selected @endif @endif>Ngừng hoạt động</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày tạo</label>
-                            <?php date_default_timezone_set('Asia/Ho_Chi_Minh') ?>
-                            <div class="input-group date" id="kt_datetimepicker_1" data-target-input="nearest">
-                                <input type="text" name="created_at" class="form-control datetimepicker-input" value="{{$category->created_at ?? date('d/m/Y H:i:s') }}" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
-                                <div class="input-group-append" data-target="#kt_datetimepicker_1" data-toggle="datetimepicker">
-															<span class="input-group-text">
-																<i class="ki ki-calendar"></i>
-															</span>
-                                </div>
-                            </div>
                         </div>
                         <div class="form-group">
                             <label>Ngày hết hạn</label>
@@ -244,48 +230,6 @@
 
     <!--end::Form-->
     <!--end::Card-->
-    <?php
-    function showOldCategories($categories, $current_data, $parent_id = null, $char = ' ')
-    {
-        foreach ($categories as $key => $item) {
-            // Nếu là chuyên mục con thì hiển thị
-            if ($item->parent_id == $parent_id) {
-                if ($item->id == $current_data->parent_id) {
-                    echo ' <option value="' . $item->id . '" selected>
-                                   ' . $char . $item->title . '
-                                </option>';
-                }elseif ($item->id == $current_data->id){
-                    echo ' <option value="' . $item->id . '" disabled>
-                                   ' . $char . $item->title . ' (đang ở đây)
-                                </option>';
-                } else {
-                    echo ' <option value="' . $item->id . '">
-                                   ' . $char . $item->title . '
-                                </option>';
-                }
-                // Xử lý hiển thị chuyên mục
-
-                // Xóa chuyên mục đã lặp
-//                unset($categories[$key]);
-
-                // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
-                showOldCategories($categories, $current_data, $item->id, $char . '__');
-            }
-        }
-    }
-
-    function showCategories($categories, $parent_id = null, $char = ' ')
-    {
-        foreach ($categories as $key => $item) {
-            // Nếu là chuyên mục con thì hiển thị
-            if ($item->parent_id == $parent_id) {
-                echo '<option value="' . $item->id . '">' . $char . $item->title . '</option>';
-                // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
-                showCategories($categories, $item->id, $char . '__');
-            }
-        }
-    }
-    ?>
 @endsection
 @section('scripts')
     <script src="{{asset('js/form-data-item.js')}}"></script>
@@ -296,12 +240,7 @@
     @if(Session::has('message'))
         <script>
             $(document).ready(function () {
-                Swal.fire({
-                    icon: "success",
-                    title: "{{Session::pull('message')}}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                toastr.success('{{ session()->pull('message') }}')
             })
         </script>
     @endif
