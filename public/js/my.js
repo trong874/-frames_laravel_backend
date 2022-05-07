@@ -19,10 +19,23 @@ gtag('js', new Date());
 gtag('config', 'AW-607164289');
 
 function setShowBtnAction() {
-        $('#expand-all').toggle();
-        $('#collapse-all').toggle();
+    $('#expand-all').toggle();
+    $('#collapse-all').toggle();
 }
 
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear(),
+        hours = d.getHours(),
+        minutes = d.getMinutes();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return `${year}-${month}-${day}  ${hours}:${minutes}`;
+}
 toastr.options = {
     "closeButton": false,
     "debug": false,
@@ -60,28 +73,28 @@ function setDataTable(route) {
             {
                 data: null,
                 title: '<label class="checkbox"><input type="checkbox"  id="master_chk" onclick="selectAllItem()"><span></span></label>',
-                orderable: false, searchable: false,
-                width: "20px",
+                orderable: false,
+                searchable: false,
+                width: "10px",
                 class: "ckb_item",
                 render: function (data, type, row) {
                     return '<label class="checkbox"><input type="checkbox" class="sub_chk" data-id="' + row.id + '">&nbsp<span></span></label>';
-
                 }
             },
             {data: 'id', title: 'ID'},
-            {data: 'title', title: 'Tiêu đề'},
+            {
+                data: 'title',
+                title: 'Tiêu đề',
+                render:function (data, type, row) {
+                    return `<p class="row-title">${row.title}</p>`
+                }
+            },
             {
                 data: null, title: 'Danh mục',
                 render: function (data, type, row) {
                     var temp = "";
                     $.each(row.groups, function (index, value) {
-                        if (value.name == 'admin') {
                             temp += "<span class=\"label label-pill label-inline label-center mr-2  label-primary \">" + value.title + "</span><br />";
-                        } else {
-                            temp += "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + value.title + "</span><br />";
-                        }
-
-                        // console.log( value.title);
                     });
                     return temp;
                 }
@@ -89,11 +102,7 @@ function setDataTable(route) {
             {
                 data: 'image', title: 'Hình ảnh', orderable: false, searchable: false,
                 render: function (data, type, row) {
-                    if (row.image == "" || row.image == null) {
-                        return "<img class=\"image-item\" src=\"/media/demos/empty.jpg\" style=\"max-width: 40px;max-height: 40px\">";
-                    } else {
-                        return "<img class=\"image-item\" src=\"" + row.image + "\" style=\"max-width: 40px;max-height: 40px\">";
-                    }
+                        return `<img class="image-item" src="${row.image || '/media/demos/empty.jpg'}" >`;
                 }
             },
             {data: 'order', title: 'Thứ tự'},
@@ -113,11 +122,15 @@ function setDataTable(route) {
             },
             {
                 data: 'created_at', title: 'Thời gian', render: function (data) {
-                    return new Date(data).toLocaleDateString();
+                    return `<p class="row-time">${formatDate(data)}</p>`;
                 }
             },
             {
-                data: null, title: 'Thao tác', orderable: false, searchable: false,
+                data: null,
+                title: 'Thao tác',
+                orderable: false,
+                searchable: false,
+                class: 'row-action',
                 render: function (data, type, row) {
                     let html = '';
                     html += '<a href="/admin/' + module + '/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2" target="_blank"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>';
@@ -130,6 +143,51 @@ function setDataTable(route) {
             }
         ]
     });
+    $('.sorting:first').trigger('click');
+}
+
+function selectAllItem() {
+    if ($('#master_chk').is(':checked', true)) {
+        $(".sub_chk").prop('checked', true);
+    } else {
+        $(".sub_chk").prop('checked', false);
+    }
+}
+
+function deleteMultiRecord(url_action) {
+    var allVals = [];
+    $(".sub_chk:checked").each(function () {
+        allVals.push($(this).attr('data-id'));
+    });
+
+
+    if (allVals.length <= 0) {
+        alert("Chưa chọn mục nào !");
+    } else {
+        var join_selected_values = allVals.join(",");
+        $.ajax({
+            url: url_action,
+            type: 'POST',
+            data: {
+                ids: join_selected_values,
+            },
+            success: function (data) {
+                Swal.fire({
+                    icon: "success",
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout("location.reload(true);", 1000);
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+        $.each(allVals, function (index, value) {
+            $('table tr').filter("[data-row-id='" + value + "']").remove();
+        });
+    }
 }
 
 $('#submit-form-search').on('click', function () {
@@ -177,25 +235,30 @@ function changeTitleToSlug(title) {
 
 
 function collectTextNodes(element, texts) {
-    for (var child= element.firstChild; child!==null; child= child.nextSibling) {
-        if (child.nodeType===3)
+    for (var child = element.firstChild; child !== null; child = child.nextSibling) {
+        if (child.nodeType === 3)
             texts.push(child);
-        else if (child.nodeType===1)
+        else if (child.nodeType === 1)
             collectTextNodes(child, texts);
     }
 }
+
 function getTextWithSpaces(element) {
-    var texts= [];
+    var texts = [];
     collectTextNodes(element, texts);
-    for (var i= texts.length; i-->0;)
-        texts[i]= texts[i].data;
+    for (var i = texts.length; i-- > 0;)
+        texts[i] = texts[i].data;
     return texts.join('>');
 }
 
 $('#keyword').on('input', function () {
     const KEYWORD = changeTitleToSlug($(this).val());
+    $('#kt_aside_menu_result_search').toggle(!!KEYWORD);
+
+    $('#kt_aside_menu').toggle(!KEYWORD);
+
     let index = 0;
-    $("#kt_aside_menu .menu-nav li").each(function () {
+    $("#kt_aside_menu_result_search .menu-nav li").each(function () {
         var textone = getTextWithSpaces(this);
         textone = changeTitleToSlug(textone);
         $(this).toggle(textone.indexOf(KEYWORD) > -1);
@@ -214,10 +277,10 @@ $('#keyword').on('input', function () {
         }
     });
 
-    $("#kt_aside_menu .menu-nav .menu-item-submenu").each(function () {
+    $("#kt_aside_menu_result_search .menu-nav .menu-item-submenu").each(function () {
         var textone = $(this).children('a').find('.menu-text').text().toLowerCase();
         textone = changeTitleToSlug(textone);
-        if (textone.indexOf(KEYWORD) > -1 ) {
+        if (textone.indexOf(KEYWORD) > -1) {
             $(this).find('.menu-subnav').children().show();
             let pre_el = $(this).prev();
             let i = $(this).index();
@@ -232,12 +295,12 @@ $('#keyword').on('input', function () {
         }
     });
 
-    $("#kt_aside_menu .menu-nav .menu-section").each(function () {
+    $("#kt_aside_menu_result_search .menu-nav .menu-section").each(function () {
         var textone = $(this).find('.menu-text').text().toLowerCase();
         textone = changeTitleToSlug(textone);
         if (textone.indexOf(KEYWORD) > -1) {
             let next_el = $(this).next();
-            while (next_el.hasClass('menu-item')){
+            while (next_el.hasClass('menu-item')) {
                 next_el.show();
                 next_el.find('.menu-subnav').children().show();
                 next_el = next_el.next();
@@ -245,6 +308,8 @@ $('#keyword').on('input', function () {
         }
     })
 
-    $("#kt_aside_menu .menu-nav li.menu-item-parent").hide()
+    $("#kt_aside_menu_result_search .menu-nav li.menu-item-parent").hide()
+
+    $('#empty-result-search').toggle(!$('#kt_aside_menu_result_search .menu-nav').children(':visible').length);
 });
 

@@ -175,59 +175,11 @@
     {{--    render button add--}}
     <script>
         $(document).ready(function () {
-            $('#submit_form').html(
-                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-danger" data-toggle="modal" data-target="#confirm_delete_muti"> <i class="flaticon2-delete"></i>Xoá đã chọn</button><a href="{{route("$module.create")}}" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-plus"></i>Tạo mới</a>'
-            )
+            let html =  '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-danger" data-toggle="modal" data-target="#confirm_delete_muti"> <i class="flaticon2-delete"></i>Xoá đã chọn</button>';
+                html +=  '<a href="{{route("$module.create")}}" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-plus"></i>Tạo mới</a>';
+            $('#submit_form').html(html)
         })
     </script>
     <script>
-        var token_jwt = localStorage.getItem('token_jwt')
-
-        function selectAllItem() {
-            if ($('#master_chk').is(':checked', true)) {
-                $(".sub_chk").prop('checked', true);
-            } else {
-                $(".sub_chk").prop('checked', false);
-            }
-        }
-
-        function deleteMultiRecord(url_action) {
-            var allVals = [];
-            $(".sub_chk:checked").each(function () {
-                allVals.push($(this).attr('data-id'));
-            });
-
-
-            if (allVals.length <= 0) {
-                alert("Chưa chọn mục nào !");
-            } else {
-                var join_selected_values = allVals.join(",");
-                $.ajax({
-                    url: url_action,
-                    type: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token_jwt,
-                    },
-                    data: {
-                        ids: join_selected_values,
-                    },
-                    success: function (data) {
-                        Swal.fire({
-                            icon: "success",
-                            title: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        setTimeout("location.reload(true);", 1000);
-                    },
-                    error: function (data) {
-                        alert(data.responseText);
-                    }
-                });
-                $.each(allVals, function (index, value) {
-                    $('table tr').filter("[data-row-id='" + value + "']").remove();
-                });
-            }
-        }
     </script>
 @endsection

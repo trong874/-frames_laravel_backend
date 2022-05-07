@@ -1,5 +1,5 @@
 body{
-    font-family:Arial, sans-serif !important ;
+    font-family:Nunito Sans, sans-serif !important ;
 }
 .form-control[type=text],.form-control[type=email]{
     line-height: 3 !important;
@@ -223,7 +223,7 @@ table.dataTable tbody td.selected a, table.dataTable tbody th.selected a, table.
 
 .label.label-success {
     color: #fff;
-    background-color: #00a651 !important;
+    white-space: nowrap;
 }
 .label-center{
     height: auto !important;

@@ -30,5 +30,9 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function (){
 
 });
 
+Route::get('test',function (){
+    return view('welcome');
+});
+
 require __DIR__.'/jetstream.php';
 require __DIR__.'/auth.php';
