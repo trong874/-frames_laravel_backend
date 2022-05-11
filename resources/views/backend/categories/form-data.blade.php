@@ -39,7 +39,7 @@
                     </div>
                     <div class="separator separator-dashed my-10"></div>
                     <div class="form-group row mt-3">
-                        <label class="col-lg-1 col-form-label text-right">Danh mục cha</label>
+                        <label class="col-lg-1 col-form-label text-right">Danh mục</label>
                         <div class="col-lg-6">
                             <select class="form-control select2" id="category_id" name="group_id">
                                 <option label="Label"></option>
@@ -155,13 +155,8 @@
                             <div class="position-relative">
                                 <div class="fileinput ck-parent" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail" style="width: 100px; height: 100px" onclick="selectFileWithCKFinder('image_banner')">
-
-                                        <img class="ck-thumb" id="image_banner"
-                                             src="{{(isset($category->image_banner))? $category->image_banner : asset('/media/demos/empty.jpg')}}"
-                                             alt="">
-                                        <input class="ck-input image_banner" id="image_banner_input" type="hidden"
-                                               name="image_banner" value="{{@$category->image_banner}}">
-
+                                        <img class="ck-thumb" id="image_banner" src="{{(isset($category->image_banner))? $category->image_banner : asset('/media/demos/empty.jpg')}}" alt="">
+                                        <input class="ck-input image_banner" id="image_banner_input" type="hidden" name="image_banner" value="{{@$category->image_banner}}">
                                     </div>
                                     <div class="button-action">
                                         <span class="" onclick="deleteImage('image_banner')"><i class="icon-xl la la-times-circle-o"></i></span>

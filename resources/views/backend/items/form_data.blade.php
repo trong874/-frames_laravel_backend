@@ -39,10 +39,9 @@
                     </div>
                     <div class="separator separator-dashed my-10"></div>
                     <div class="form-group row mt-3">
-                        <label class="col-lg-2 col-form-label text-right">Danh mục cha</label>
+                        <label class="col-lg-2 col-form-label text-right">Danh mục</label>
                         <div class="col-lg-5">
-                            <select class="form-control select2" id="group_id_input" name="group_id[]"
-                                    multiple="multiple">
+                            <select class="form-control select2" id="group_id_input" name="group_id[]" multiple="multiple">
                                 <optgroup label="Chọn danh mục">
                                     @if(isset($item))
                                         {{ get_option_old_categories($categories,$item)}}
@@ -465,7 +464,7 @@
     <script>
         $(document).ready(function () {
             $('#submit_form').html(
-                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-check-mark"></i>' + '{{@$item ? "Chỉnh sửa" : "Thêm mới"}}' + '</button>'
+                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-checkmark"></i>' + '{{@$item ? "Chỉnh sửa" : "Thêm mới"}}' + '</button>'
             )
         })
         $('#submit_form').on('click', function () {
@@ -484,9 +483,9 @@
                 '                                        <td><input type="text" class="form-control qty_subitem_' + countRow + '_0"></td>\n' +
                 '                                        <td><button type="button" class="btn btn-sm btn-danger" disabled>Xoá</button></td>\n' +
                 '                                        <td rowspan="1" style="height: 0" class="action_option">\n' +
-                '                                            <button type="button" class="btn btn-sm btn-danger" style="height: 50%" onclick="deleteOption(' + countRow + ')"><i class="far fa-trash-alt"></i></button>\n' +
+                '                                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteOption(' + countRow + ')"><i class="far fa-trash-alt"></i></button>\n' +
                 '                                            <br>\n' +
-                '                                            <button type="button" class="btn btn-sm btn-success add_row_in_option" style="height: 50%" onclick="addRowInOption(' + countRow + ')"><i class="fas fa-plus"></i></button>\n' +
+                '                                            <button type="button" class="btn btn-sm btn-success add_row_in_option" onclick="addRowInOption(' + countRow + ')"><i class="fas fa-plus"></i></button>\n' +
                 '                                        </td>\n' +
                 '                                    </tr>\n' +
                 '                                    </tbody>')

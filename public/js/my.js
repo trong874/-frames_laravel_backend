@@ -18,11 +18,6 @@ gtag('js', new Date());
 
 gtag('config', 'AW-607164289');
 
-function setShowBtnAction() {
-    $('#expand-all').toggle();
-    $('#collapse-all').toggle();
-}
-
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -35,6 +30,11 @@ function formatDate(date) {
     if (day.length < 2) day = '0' + day;
 
     return `${year}-${month}-${day}  ${hours}:${minutes}`;
+}
+
+function getSegment(index,array =  window.location.pathname.split('/')){
+    array.splice(0,1);
+    return array[index];
 }
 toastr.options = {
     "closeButton": false,
@@ -55,14 +55,7 @@ toastr.options = {
 };
 
 function setDataTable(route) {
-    // const newURL =
-    //     window.location.protocol +
-    //     "://" +
-    //     window.location.host +
-    //     "/" +
-    //     window.location.pathname;
-    const pathArray = window.location.pathname.split("/");
-    const module = pathArray[2];
+    const module = getSegment(1);
     $('#kt_datatable').DataTable({
         responsive: true,
         processing: true,
@@ -133,11 +126,20 @@ function setDataTable(route) {
                 class: 'row-action',
                 render: function (data, type, row) {
                     let html = '';
-                    html += '<a href="/admin/' + module + '/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2" target="_blank"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>';
-                    html += '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteItem(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-trash\n"></i></span></button>';
-                    html += '<a href="/admin/duplicate-item/' + row.id + '" class="btn btn-sm btn-clean btn-icon" title="Replicate">'
-                    html += '<i class="far fa-copy"></i>'
-                    html += '</a>'
+                    let module_is_group = module.indexOf('-group') > 0;
+                    if (module_is_group){
+                       // là group
+                        html += `<a href="/admin/${module}/${row.id}/edit" class="btn btn-sm btn-clean btn-icon mr-2"><span class="svg-icon svg-icon-md"><i class="far fa-edit"></i></span></a>`;
+                        html += `<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#items_in_group" onclick="setItemInGroupModal(${row.id})"><span class="svg-icon svg-icon-md"><i class="fas fa-list-ul"></i></span></button>`;
+                        html += `<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteGroup(${row.id})"><span class="svg-icon svg-icon-md"><i class="fas fa-trash"></i></span></button>`;
+                    }else {
+                        // là item
+                        html += '<a href="/admin/' + module + '/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2" target="_blank"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>';
+                        html += '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteItem(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-trash\n"></i></span></button>';
+                        html += '<a href="/admin/duplicate-item/' + row.id + '" class="btn btn-sm btn-clean btn-icon" title="Replicate">';
+                        html += '<i class="far fa-copy"></i>';
+                        html += '</a>';
+                    }
                     return html;
                 }
             }
@@ -202,7 +204,7 @@ $('#submit-form-search').on('click', function () {
     })
 });
 
-function changeTitleToSlug(title) {
+function convertToSlug(title) {
     var slug;
 
     //Đổi chữ hoa thành chữ thường
@@ -233,6 +235,39 @@ function changeTitleToSlug(title) {
     return slug;
 }
 
+function changeTitleToSlug() {
+    var title, slug;
+
+    //Lấy text từ thẻ input title
+    title = document.getElementById("title").value;
+
+    //Đổi chữ hoa thành chữ thường
+    slug = title.toLowerCase();
+
+    //Đổi ký tự có dấu thành không dấu
+    slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+    slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+    slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+    slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+    slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+    slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+    slug = slug.replace(/đ/gi, 'd');
+    //Xóa các ký tự đặt biệt
+    slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+    //Đổi khoảng trắng thành ký tự gạch ngang
+    slug = slug.replace(/ /gi, "-");
+    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+    slug = slug.replace(/\-\-\-\-\-/gi, '-');
+    slug = slug.replace(/\-\-\-\-/gi, '-');
+    slug = slug.replace(/\-\-\-/gi, '-');
+    slug = slug.replace(/\-\-/gi, '-');
+    //Xóa các ký tự gạch ngang ở đầu và cuối
+    slug = '@' + slug + '@';
+    slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+    //In slug ra textbox có id “slug”
+    document.getElementById('slug').value = slug;
+}
 
 function collectTextNodes(element, texts) {
     for (var child = element.firstChild; child !== null; child = child.nextSibling) {
@@ -244,25 +279,26 @@ function collectTextNodes(element, texts) {
 }
 
 function getTextWithSpaces(element) {
-    var texts = [];
+    let texts = [];
     collectTextNodes(element, texts);
-    for (var i = texts.length; i-- > 0;)
+    for (let i = texts.length; i-- > 0;)
         texts[i] = texts[i].data;
     return texts.join('>');
 }
 
 $('#keyword').on('input', function () {
-    const KEYWORD = changeTitleToSlug($(this).val());
+    const KEYWORD = convertToSlug($(this).val());
     $('#kt_aside_menu_result_search').toggle(!!KEYWORD);
 
     $('#kt_aside_menu').toggle(!KEYWORD);
 
     let index = 0;
     $("#kt_aside_menu_result_search .menu-nav li").each(function () {
-        var textone = getTextWithSpaces(this);
-        textone = changeTitleToSlug(textone);
-        $(this).toggle(textone.indexOf(KEYWORD) > -1);
-        if (textone.indexOf(KEYWORD) > -1) {
+        let textone = getTextWithSpaces(this);
+        textone = convertToSlug(textone);
+        let toggle_status = textone.indexOf(KEYWORD) > -1;
+        $(this).toggle(toggle_status);
+        if (toggle_status) {
             let pre_el = $(this).prev();
             let i = $(this).index();
             while (i) {
@@ -279,7 +315,7 @@ $('#keyword').on('input', function () {
 
     $("#kt_aside_menu_result_search .menu-nav .menu-item-submenu").each(function () {
         var textone = $(this).children('a').find('.menu-text').text().toLowerCase();
-        textone = changeTitleToSlug(textone);
+        textone = convertToSlug(textone);
         if (textone.indexOf(KEYWORD) > -1) {
             $(this).find('.menu-subnav').children().show();
             let pre_el = $(this).prev();
@@ -297,7 +333,7 @@ $('#keyword').on('input', function () {
 
     $("#kt_aside_menu_result_search .menu-nav .menu-section").each(function () {
         var textone = $(this).find('.menu-text').text().toLowerCase();
-        textone = changeTitleToSlug(textone);
+        textone = convertToSlug(textone);
         if (textone.indexOf(KEYWORD) > -1) {
             let next_el = $(this).next();
             while (next_el.hasClass('menu-item')) {

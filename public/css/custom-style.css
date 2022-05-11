@@ -1,0 +1,19 @@
+.dd-handle p.title-item {
+    width: 90%;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+.title-item-search {
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+
+.action-collapse i {
+    font-size: .5rem;
+}

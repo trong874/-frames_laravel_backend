@@ -175,8 +175,8 @@
     {{--    render button add--}}
     <script>
         $(document).ready(function () {
-            let html =  '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-danger" data-toggle="modal" data-target="#confirm_delete_muti"> <i class="flaticon2-delete"></i>Xoá đã chọn</button>';
-                html +=  '<a href="{{route("$module.create")}}" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-plus"></i>Tạo mới</a>';
+            let html =  '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-danger" data-toggle="modal" data-target="#confirm_delete_muti"> <i class="flaticon2-trash"></i>Xoá đã chọn</button>';
+                html +=  '<a href="{{route("$module.create")}}" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-add"></i>Tạo mới</a>';
             $('#submit_form').html(html)
         })
     </script>

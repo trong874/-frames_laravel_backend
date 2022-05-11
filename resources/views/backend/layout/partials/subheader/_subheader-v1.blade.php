@@ -1,21 +1,22 @@
 {{-- Subheader V1 --}}
 
 <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-    <div class="{{ Metronic::printClasses('subheader-container', false) }} d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+    <div
+        class="{{ Metronic::printClasses('subheader-container', false) }} d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
 
-		{{-- Info --}}
+        {{-- Info --}}
         <div class="d-flex align-items-center flex-wrap mr-1">
 
-			{{-- Page Title --}}
-{{--            <h5 class="text-dark font-weight-bold my-2 mr-5">--}}
-{{--                {{ @$page_title }}--}}
+            {{-- Page Title --}}
+            {{--            <h5 class="text-dark font-weight-bold my-2 mr-5">--}}
+            {{--                {{ @$page_title }}--}}
 
-{{--                @if (isset($page_description) && config('layout.subheader.displayDesc'))--}}
-{{--                    <small>{{ @$page_description }}</small>--}}
-{{--                @endif--}}
-{{--            </h5>--}}
+            {{--                @if (isset($page_description) && config('layout.subheader.displayDesc'))--}}
+            {{--                    <small>{{ @$page_description }}</small>--}}
+            {{--                @endif--}}
+            {{--            </h5>--}}
 
-            @if (!empty($page_breadcrumbs))
+            @if (isset($page_breadcrumbs))
                 {{-- Separator --}}
                 <div class="subheader-separator subheader-separator-ver my-2 mr-4 d-none"></div>
 
@@ -27,26 +28,27 @@
                         </a>
                     </li>
 
-                    @foreach ($page_breadcrumbs as $k => $item)
+                    @forelse ($page_breadcrumbs as $k => $item)
                         <li class="breadcrumb-item">
                             <a href="{{ url($item['page']) }}" class="text-muted">
                                 {{ $item['title'] }}
                             </a>
                         </li>
-                    @endforeach
+                    @empty
+                    @endforelse
                 </ul>
             @endif
         </div>
 
-		{{-- Toolbar --}}
+        {{-- Toolbar --}}
         <div class="d-flex align-items-center">
             @hasSection('page_toolbar')
-                @section('page_toolbar')
-            @endif
+            @section('page_toolbar')
+                @endif
 
-            <div class="dropdown dropdown-inline" id="submit_form">
+                <div class="dropdown dropdown-inline" id="submit_form">
 
-            </div>
+                </div>
         </div>
     </div>
 </div>

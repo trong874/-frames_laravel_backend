@@ -20,12 +20,8 @@ function showCategory($groups, $module, $parent_id = null)
                             data-id="' . $item->id . '"
                             style="margin-right:10px">' . $item->title . '
                     <div style="position:absolute;right:2rem;top:.3rem" id="button_acction-' . $item->id . '">
-                    <form method="post" action="' . route("$module.destroy", $item) . '">
-                    ' . csrf_field() . '
-                    ' . method_field('delete') . '
-                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                    <button type="button"  class="btn btn-sm btn-danger delete-category" data-toggle="modal" data-target="#confirm_delete" data-url="' . route("$module.destroy", $item) . '">Xóa</button>
                     <a href="' . route("$module.edit", $item->id) . '" class="btn btn-sm btn-warning">Sửa</a>
-                    </form>
                     </div>
                  </div>';
 

@@ -9,7 +9,9 @@ class PagesController extends Controller
 {
     public function index()
     {
-        return view('backend.pages.dashboard',['page_breadcrumbs'=>'']);
+        return view('backend.pages.dashboard',[
+            'page_breadcrumbs'=>[],
+        ]);
     }
 
     /**

@@ -35,14 +35,14 @@
                     </div>
                     <div class="separator separator-dashed my-10"></div>
                     <div class="form-group row mt-3">
-                        <label class="col-lg-1 col-form-label text-right">Danh mục cha</label>
+                        <label class="col-lg-1 col-form-label text-right">Danh mục</label>
                         <div class="col-lg-6">
-                            <select class="form-control" name="parent_id">
-                                <option value="">--Danh mục cha--</option>
+                            <select class="form-control select2" id="category_id" name="parent_id">
+                                <option label="Label"></option>
                                 @if(isset($group))
-                                    {{showOldCategories($groups,$group)}}
+                                    {{ get_option_old_categories($groups,$group) }}
                                 @else
-                                    {{showCategories($groups)}}
+                                    {{ get_option_categories($groups)}}
                                 @endif
                             </select>
                         </div>
@@ -240,48 +240,6 @@
     </form>
     <!--end::Form-->
     <!--end::Card-->
-    <?php
-    function showOldCategories($categories, $current_data, $parent_id = 0, $char = ' ')
-    {
-        foreach ($categories as $key => $item) {
-            // Nếu là chuyên mục con thì hiển thị
-            if ($item->parent_id == $parent_id) {
-                if ($current_data->id == $item->id) {
-                    echo '<option value="' . $item->id . '" disabled>' . $item->id . $char . $item->title . '(đang ở đây)</option>';
-                } elseif ($current_data->parent_id == $item->id && $current_data->parent_id != '') {
-                    echo '<option value="' . $item->id . '" selected>' . $item->id . $char . $item->title . '</option>';
-                } else {
-                    echo '<option value="' . $item->id . '">' . $item->id . $char . $item->title . '</option>';
-                }
-                // Xử lý hiển thị chuyên mục
-
-
-                // Xóa chuyên mục đã lặp
-//                unset($categories[$key]);
-
-                // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
-                showOldCategories($categories, $current_data, $item->id, $char . '---');
-            }
-        }
-    }
-    function showCategories($categories, $parent_id = 0, $char = ' ')
-    {
-        foreach ($categories as $key => $item) {
-            // Nếu là chuyên mục con thì hiển thị
-            if ($item->parent_id == $parent_id) {
-                echo '<option value="' . $item->id . '">' . $item->id . $char . $item->title . '</option>';
-                // Xử lý hiển thị chuyên mục
-
-
-                // Xóa chuyên mục đã lặp
-//                unset($categories[$key]);
-
-                // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
-                showCategories($categories, $item->id, $char . '---');
-            }
-        }
-    }
-    ?>
 @endsection
 @section('scripts')
     <script src="{{asset('js/pages/crud/forms/widgets/select2.js')}}"></script>
@@ -296,49 +254,13 @@
         </script>
     @endif
     <script>
-        function changeTitleToSlug() {
-            var title, slug;
-
-            //Lấy text từ thẻ input title
-            title = document.getElementById("title").value;
-
-            //Đổi chữ hoa thành chữ thường
-            slug = title.toLowerCase();
-
-            //Đổi ký tự có dấu thành không dấu
-            slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
-            slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
-            slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
-            slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
-            slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
-            slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
-            slug = slug.replace(/đ/gi, 'd');
-            //Xóa các ký tự đặt biệt
-            slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
-            //Đổi khoảng trắng thành ký tự gạch ngang
-            slug = slug.replace(/ /gi, "-");
-            //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
-            //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
-            slug = slug.replace(/\-\-\-\-\-/gi, '-');
-            slug = slug.replace(/\-\-\-\-/gi, '-');
-            slug = slug.replace(/\-\-\-/gi, '-');
-            slug = slug.replace(/\-\-/gi, '-');
-            //Xóa các ký tự gạch ngang ở đầu và cuối
-            slug = '@' + slug + '@';
-            slug = slug.replace(/\@\-|\-\@|\@/gi, '');
-            //In slug ra textbox có id “slug”
-            document.getElementById('slug').value = slug;
-            {{--document.getElementById('url').value  = "{{url('')}}/tin-tuc/"+ slug;--}}
-        }
-    </script>
-    <script>
         $(document).ready(function () {
             $('#submit_form').html(
-                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-check-mark"></i>' + '{{@$group ? "Chỉnh sửa" : "Thêm mới"}}' + '</button>'
-            )
-        })
+                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-checkmark"></i>' + '{{@$group ? "Chỉnh sửa" : "Thêm mới"}}' + '</button>'
+            );
+        });
         $('#submit_form').on('click', function () {
             $('#formMain').submit();
-        })
+        });
     </script>
 @endsection

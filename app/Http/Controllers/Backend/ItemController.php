@@ -178,16 +178,12 @@ class ItemController extends Controller
 
     public function searchItemGroup(Request $request)
     {
-        if (empty($request->search_query)) {
-            return response()->json([
-                'message_error' => 'không tìm thấy !'
-            ]);
-        }
         $result = Item::where('title', 'LIKE', '%' . $request->search_query . '%')
             ->where('module', substr($request->module, 0, -6))
             ->limit(2)
             ->get([
                 'id',
+                'image',
                 'title',
                 'status'
             ]);

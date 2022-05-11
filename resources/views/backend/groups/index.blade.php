@@ -42,7 +42,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Xác nhận thao tác xóa item
+                    Xác nhận thao tác xóa nhóm
                 </div>
                 <div class="modal-footer">
                     <form action="" method="POST" id="form_delete">
@@ -65,18 +65,17 @@
         <div id="kakaa" class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="title_modal"></h5>
+                    <h5 class="modal-title" id="title_modal">* Kéo thả để sắp xếp vị trí</h5>
                     <button type="button" class="close" data-dismiss="modal"
                             aria-label="Close">
                         <i aria-hidden="true" class="ki ki-close"></i>
                     </button>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Tìm kiếm</label>
-                        <input type="text" class="form-control" data-group_id="" id="input_search_item_group"
-                               oninput="searchItem(this.value,this.getAttribute('data-group_id'))">
+                        <input type="search" class="form-control" data-group_id="" id="input_search_item_group"
+                               placeholder="Từ khoá...">
                     </div>
                     <div id="result_data"></div>
                     <div class="card">
@@ -140,78 +139,8 @@
     @endif
     <!-- App scripts -->
     <script>
-        var token_jwt = localStorage.getItem('token_jwt');
-        $(function () {
-            $('#kt_datatable').DataTable({
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('ajax_get_group',$module) !!}',
-                columns: [
-                    {
-                        data: null,
-                        title: '<label class="checkbox"><input type="checkbox" id="master_chk" onclick="selectAllItem()"><span></span></label>',
-                        orderable: false, searchable: false,
-                        width: "20px",
-                        class: "ckb_item",
-                        render: function (data, type, row) {
-                            return '<label class="checkbox"><input type="checkbox" class="sub_chk" data-id="' + row.id + '">&nbsp<span></span></label>';
-
-                        }
-                    },
-                    {data: 'id', title: 'ID'},
-                    {
-                        data: 'title', title: 'Tiêu đề', render: function (data, type, row) {
-                            return '<span class="backend-title">' + data + '</span>'
-                        }
-                    },
-                    {
-                        data: null,
-                        title: 'Danh mục',
-                        render: function (data, type, row) {
-                            if (row.group) {
-                                return "<span class=\"label label-pill label-inline label-center mr-2  label-primary \">" + row.group.title + "</span><br />";
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        data: 'image', title: 'Hình ảnh', orderable: false, searchable: false,
-                        render: function (data, type, row) {
-                            if (row.image == "" || row.image == null) {
-                                return "<img class=\"image-item\" src=\"/media/demos/empty.jpg\" style=\"max-width: 40px;max-height: 40px\">";
-                            } else {
-                                return "<img class=\"image-item\" src=\"" + row.image + "\" style=\"max-width: 40px;max-height: 40px\">";
-                            }
-                        }
-                    },
-                    {data: 'order', title: 'Thứ tự'},
-                    {data: 'position', title: 'Vị trí'},
-                    {
-                        data: 'status', title: 'Trạng thái', render: function (data, type, row) {
-
-                            if (row.status == 1) {
-                                return "<span class=\"label label-pill label-inline label-center mr-2  label-success \">" + "Hoạt động" + "</span>";
-                            } else if (row.status == 2) {
-                                return "<span class=\"label label-pill label-inline label-center mr-2 label-warning \">" + "" + "</span>";
-                            } else {
-                                return "<span class=\"label label-pill label-inline label-center mr-2 label-danger \">" + "Ngừng hoạt động" + "</span>";
-                            }
-                        }
-                    },
-                    {data: 'created_at', title: 'Thời gian'},
-                    {
-                        data: null, title: 'Thao tác', orderable: false, class: 'backend-', searchable: false,
-                        render: function (data, type, row) {
-                            return '<a href="/admin/{{$module}}/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>' +
-                                '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#items_in_group" onclick="setItemInGroupModal(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-list-ul\n"></i></span></button>' +
-                                '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteGroup(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-trash\n"></i></span></button>';
-                        }
-                    }
-                ]
-            });
-        });
+        setDataTable({url: '{!! route('ajax_get_group',$module) !!}'})
+        let keyword_input = $('#input_search_item_group');
         function updateOutput(e) {
             var list = e.length ? e : $(e.target),
                 output = list.data('output');
@@ -222,11 +151,11 @@
             }
 
             $.ajax({
-                url:"{{ route('index.change-order-in-group') }}",
-                type:'POST',
+                url: "{{ route('index.change-order-in-group') }}",
+                type: 'POST',
                 data: {
-                    list:list.nestable('serialize'),
-                    group_id: $('#input_search_item_group').attr('data-group_id'),
+                    list: list.nestable('serialize'),
+                    group_id: keyword_input.attr('data-group_id'),
                 },
                 success: function (res) {
                     toastr.success(res.message)
@@ -237,76 +166,79 @@
             });
         }
 
-        // Bấm modal lên phát set lại vị trí luôn
         $(document).ready(function () {
             $('#nestable').nestable().on('change', updateOutput);
         });
-        function searchItem(value, group_id) {
-            $.ajax({
-                url: "{{route('items.search')}}",
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token_jwt,
-                },
-                data: {
-                    search_query: value,
-                    module: "{{$module}}",
-                },
-                success: function (res) {
-                    if (res.message_error) {
-                        $('#result_data').html('')
-                    } else {
-                        $('#result_data').html(' <div class="card">\n' +
-                            '                            <div class="card-body" id="result-list-item">\n' +
-                            '\n' +
-                            '                            </div>\n' +
-                            '                        </div>')
-                        res.forEach(function (item) {
-                            $('#result-list-item').append('<div class="alert alert-custom alert-notice alert-light-primary fade show mb-5">' +
-                                '        <div class="symbol symbol-60 symbol-2by3 flex-shrink-0 mr-4">\n' +
-                                '            <div class="symbol-label" style="background-image: url(' + item.image + ')"></div>\n' +
-                                '        </div>\n' +
-                                '        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 mr-2">\n' +
-                                '            <a href="#" class="text-dark-75 font-weight-bold text-hover-primary font-size-lg mb-1">' + item.title + '</a>\n' +
-                                '            <span class="text-muted font-weight-bold">100k</span>\n' +
-                                '        </div>\n' +
-                                '        <div class="d-flex align-items-center mt-lg-0 mt-3">\n' +
-                                '            <!--begin::Btn-->\n' +
-                                '            <button class="btn btn-icon btn-light btn-sm" onclick="insertItemToGroup(' + item.id + ',' + group_id + ')">\n' +
-                                '\t\t\t\t\t<span class="svg-icon svg-icon-success">\n' +
-                                '\t\t\t\t\t<span class="svg-icon svg-icon-md">\n' +
-                                '\t\t\t\t\t\t<img src="/media/svg/icons/Files/Import.svg"/>\n' +
-                                '\t\t\t\t\t\t</span>\n' +
-                                '\t\t\t\t\t</span>\n' +
-                                '            </button>\n' +
-                                '        </div>\n' +
-                                '    </div>')
-                        })
-                    }
+
+        keyword_input.on('input', function () {
+            clearTimeout(this.delay);
+            this.delay = setTimeout(function () {
+                if( !$(this).val() ) {
+                    $('#result_data').html('');
+                }else {
+                    const GROUP_ID = $(this).data('group_id');
+                    $.ajax({
+                        url: "/api/search-item",
+                        method: 'GET',
+                        data: {
+                            search_query: $(this).val(),
+                            module: "{{$module}}",
+                        },
+                        success: function (res) {
+                            let html = '';
+                            html += `<div class="card">`;
+                            html += `<div class="card-body" id="result-list-item">`;
+                            html += `</div>`;
+                            html += `</div>`;
+                            if (res.length) {
+                                $('#result_data').html(html);
+                            }
+                            res.forEach(function (item) {
+                                let html = '<div class="alert alert-custom alert-white shadow-lg fade show">';
+                                html += '<div class="symbol symbol-60 symbol-2by3 flex-shrink-0 mr-4">';
+                                html += `<div class="symbol-label" style="background-image: url( ${item.image || '/media/demos/empty.jpg'})"></div>`;
+                                html += '</div>';
+                                html += '<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 mr-2">';
+                                html += `<p class="text-dark-75 font-weight-bold text-hover-primary font-size-lg title-item-search mb-1">${item.title}</p>`;
+                                html += `<span class="text-muted font-weight-bold">ID : ${item.id}</span>`;
+                                html += '</div>';
+                                html += '<div class="d-flex align-items-center mt-lg-0 mt-3">';
+                                html += '<button class="btn btn-icon btn-light btn-sm" onclick="insertItemToGroup(' + item.id + ',' + GROUP_ID + ')">';
+                                html += '<span class="svg-icon svg-icon-success">';
+                                html += '<span class="svg-icon svg-icon-md">';
+                                html += '<i class="flaticon-download"></i>';
+                                html += '</span>';
+                                html += '</span>';
+                                html += '</button>';
+                                html += '</div>';
+                                html += '</div>';
+                                $('#result-list-item').append(html)
+                            })
+                        }
+                    })
                 }
-            })
-        }
+            }.bind(this), 500);
+        });
 
         function insertItemToGroup(item_id, group_id) {
             $(document).ready(function () {
                 $.ajax({
                     url: "{{route('insert_item_to_group')}}",
                     type: "POST",
-                    headers: {
-                        'Authorization': 'Bearer ' + token_jwt,
-                    },
                     data: {
                         item_id: item_id,
                         group_id: group_id
                     },
                     success: function (res) {
                         if (res.error_message) {
-                            showToastError(res.message)
+                            toastr.success(res.message)
                         } else {
                             $('#nestable .dd-list').html('')
                             res.items.forEach(function (item) {
                                 appenDataTable(item, group_id)
                             })
+                            // output initial serialised data
+                            updateOutput($('#nestable').data('output', $('#nestable-output')));
                             toastr.success(res.message);
                         }
                     }
@@ -319,15 +251,12 @@
         }
 
         function setItemInGroupModal(group_id) {
-            $('#input_search_item_group').attr('data-group_id', group_id);
+            keyword_input.attr('data-group_id', group_id);
             $('#result_data').html('')
             $(document).ready(function () {
                 $.ajax({
                     url: "{{route('get_item_in_group')}}",
                     type: "POST",
-                    headers: {
-                        'Authorization': 'Bearer ' + token_jwt,
-                    },
                     data: {
                         group_id: group_id,
                     },
@@ -336,8 +265,6 @@
                         res.forEach(function (item) {
                             appenDataTable(item, group_id)
                         });
-                        // output initial serialised data
-                        updateOutput($('#nestable').data('output', $('#nestable-output')));
                     }
                 })
             })
@@ -348,20 +275,16 @@
                 $.ajax({
                     url: "{{route('delete_item_in_group')}}",
                     type: "POST",
-                    headers: {
-                        'Authorization': 'Bearer ' + token_jwt,
-                    },
                     data: {
                         group_id: group_id,
-                        item_id: item_id
+                        item_id: item_id,
                     },
                     success: function (res) {
                         $('#nestable .dd-list').html('')
                         res.items.forEach(function (item) {
-                            //append data
                             appenDataTable(item, group_id)
                         })
-                        showToastSuccess(res.message)
+                        toastr.success(res.message)
                     }
                 })
             })
@@ -370,7 +293,7 @@
         function appenDataTable(item, group_id) {
             let html = '';
             html += `<li class="dd-item" data-id="${item.id}">`;
-            html += `<div class="dd-handle">${item.title}`;
+            html += `<div class="dd-handle"><p class="title-item">${item.title}</p>`;
             html += `<div style="position:absolute;right:2rem;top:.3rem">`;
             html += `<button class="btn btn-sm btn-danger" onclick="if (confirm('Xác nhận xoá item?')){deleteItemInGroup(${item.id},${group_id})}">Xoá</button>`;
             html += `</div>`;
@@ -382,9 +305,9 @@
     {{--    render button add--}}
     <script>
         $(document).ready(function () {
-            $('#submit_form').html(
-                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-danger" data-toggle="modal" data-target="#confirm_delete_muti"> <i class="flaticon2-delete"></i>Xoá đã chọn</button><a href="{{route("$module.create")}}" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-plus"></i>Tạo mới</a>'
-            )
+            let html = '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-danger" data-toggle="modal" data-target="#confirm_delete_muti"> <i class="flaticon2-trash"></i>Xoá đã chọn</button>';
+            html += '<a href="{{route("$module.create")}}" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-add"></i>Tạo mới</a>';
+            $('#submit_form').html(html)
         })
     </script>
     <script>

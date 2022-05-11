@@ -271,6 +271,7 @@ return [
             'plugins/custom/prismjs/prismjs.bundle.css',
             'css/style.bundle.css',
             '/css/override.css',
+            '/css/custom-style.css',
         ],
         'js' => [
             'plugins/global/plugins.bundle.js',

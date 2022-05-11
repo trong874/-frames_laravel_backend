@@ -131,7 +131,7 @@
                     <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Xin chào ,</span>
                     <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{{@Auth::user()->username}}</span>
                     <span class="symbol symbol-35 symbol-light-success">
-                        <img src="{{Auth::user()->image ?? 'https://ui-avatars.com/api/?name='.auth()->user()->username.'&color=FF00FF&background=EBF4FF ' }}" alt="avatar image">
+                        <img src="{{Auth::user()->getProfilePhotoUrlAttribute() ?? 'https://ui-avatars.com/api/?name='.auth()->user()->username.'&color=FF00FF&background=EBF4FF ' }}" alt="avatar image">
                     </span>
                 </div>
             </div>
