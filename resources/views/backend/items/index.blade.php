@@ -60,9 +60,9 @@
                         <div class="form-group container">
                             <span class="form-label">Khoảng thời gian</span>
                             <div class="input-daterange input-group" id="kt_datepicker_5">
-                                <input type="text" class="form-control" name="date_from" autocomplete="off" placeholder="Từ ngày">
+                                <input type="text" class="form-control datepicker-custom" name="date_from" autocomplete="off" placeholder="Từ ngày">
                                 <div class="input-group-append"><span class="input-group-text"><i class="la la-ellipsis-h"></i></span></div>
-                                <input type="text" class="form-control" name="date_to" autocomplete="off" placeholder="Đến ngày">
+                                <input type="text" class="form-control datepicker-custom" name="date_to" autocomplete="off" placeholder="Đến ngày">
                             </div>
                         </div>
                     </div>
@@ -158,6 +158,7 @@
     {{--    Notify--}}
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
     <script src="{{asset('js/pages/crud/forms/widgets/select2.js')}}"></script>
+    <script src="{{asset('js/pages/crud/forms/widgets/bootstrap-datepicker.js')}}"></script>
 
     @if(Session::has('message'))
         <script>

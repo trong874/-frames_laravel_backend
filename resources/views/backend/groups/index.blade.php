@@ -141,6 +141,7 @@
     <script>
         setDataTable({url: '{!! route('ajax_get_group',$module) !!}'})
         let keyword_input = $('#input_search_item_group');
+        let first_open_modal = false;
         function updateOutput(e) {
             var list = e.length ? e : $(e.target),
                 output = list.data('output');
@@ -158,14 +159,17 @@
                     group_id: keyword_input.attr('data-group_id'),
                 },
                 success: function (res) {
-                    toastr.success(res.message)
+                    if(!first_open_modal){
+                        toastr.success(res.message);
+                    }
+                    first_open_modal = false;
                 },
                 error: function (request, status, error) {
                     console.log(request.responseText);
                 }
             });
         }
-
+        // Sự kiện khi kéo thả vị trí
         $(document).ready(function () {
             $('#nestable').nestable().on('change', updateOutput);
         });
@@ -227,16 +231,16 @@
                     type: "POST",
                     data: {
                         item_id: item_id,
-                        group_id: group_id
+                        group_id: group_id,
                     },
                     success: function (res) {
                         if (res.error_message) {
-                            toastr.success(res.message)
+                            toastr.success(res.message);
                         } else {
                             $('#nestable .dd-list').html('')
                             res.items.forEach(function (item) {
                                 appenDataTable(item, group_id)
-                            })
+                            });
                             // output initial serialised data
                             updateOutput($('#nestable').data('output', $('#nestable-output')));
                             toastr.success(res.message);
@@ -265,6 +269,9 @@
                         res.forEach(function (item) {
                             appenDataTable(item, group_id)
                         });
+                        first_open_modal = true;
+                        // output initial serialised data
+                        updateOutput($('#nestable').data('output', $('#nestable-output')));
                     }
                 })
             })
@@ -294,7 +301,7 @@
             let html = '';
             html += `<li class="dd-item" data-id="${item.id}">`;
             html += `<div class="dd-handle"><p class="title-item">${item.title}</p>`;
-            html += `<div style="position:absolute;right:2rem;top:.3rem">`;
+            html += `<div style="position:absolute;right:3rem;top:.3rem">`;
             html += `<button class="btn btn-sm btn-danger" onclick="if (confirm('Xác nhận xoá item?')){deleteItemInGroup(${item.id},${group_id})}">Xoá</button>`;
             html += `</div>`;
             html += `</div>`;

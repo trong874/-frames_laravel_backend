@@ -143,7 +143,18 @@ function setDataTable(route) {
                     return html;
                 }
             }
-        ]
+        ],
+        language: {
+            "lengthMenu": "Hiển thị _MENU_ bản ghi",
+            "sSearch":"Tìm kiếm:",
+            "zeroRecords": "Không tìm thấy gì.",
+            "info": "Đang hiển thị trang _PAGE_ / _PAGES_",
+            "infoEmpty": "Không có bản ghi nào.",
+            "oPaginate":{
+                "sNext":"Sau",
+                "sPrevious": "Trước",
+            }
+        }
     });
     $('.sorting:first').trigger('click');
 }
