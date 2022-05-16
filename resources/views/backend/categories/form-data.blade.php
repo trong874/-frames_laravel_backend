@@ -41,7 +41,7 @@
                     <div class="form-group row mt-3">
                         <label class="col-lg-1 col-form-label text-right">Danh mục</label>
                         <div class="col-lg-6">
-                            <select class="form-control select2" id="category_id" name="group_id">
+                            <select class="form-control select2 select2-basic" name="group_id">
                                 <option label="Label"></option>
                                 @if(isset($category))
                                     <?php get_option_old_parent_categories($groups,$category); ?>

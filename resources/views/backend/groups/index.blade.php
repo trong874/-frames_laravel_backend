@@ -159,8 +159,11 @@
                     group_id: keyword_input.attr('data-group_id'),
                 },
                 success: function (res) {
-                    if(!first_open_modal){
+                    if(!first_open_modal && res.status){
                         toastr.success(res.message);
+                    }
+                    if(!res.status && !first_open_modal) {
+                        toastr.error(res.message);
                     }
                     first_open_modal = false;
                 },
@@ -221,7 +224,7 @@
                         }
                     })
                 }
-            }.bind(this), 500);
+            }.bind(this), 300);
         });
 
         function insertItemToGroup(item_id, group_id) {

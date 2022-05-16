@@ -6,19 +6,13 @@
     <link rel="stylesheet" href="{{asset('css/product-form.css')}}">
 @endsection
 @section('content')
-    <form action="{{route("setting.update",'-')}}" method="POST">
+    <form action="{{route("setting.update",'-')}}" method="POST" id="formMain">
         @method('PUT')
         @csrf
         <div class="card card-custom">
             <div class="card-header">
                 <div class="card-title">
-                    <h3 class="card-label">{{__('Cấu hình hệ thống')}}</h3>
-                </div>
-                <div class="card-toolbar">
-                    <!--begin::Button-->
-                    <button type="submit" class="btn btn-primary font-weight-bolder">
-                        <i class="flaticon2-check-mark"></i>{{__('Cập nhật')}}</button>
-                    <!--end::Button-->
+                    <h3 class="card-label">{{__('Cấu hình chung')}}</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -57,17 +51,22 @@
                                 <div class="form-group">
                                     <label>{{$setting['label']}}</label>
                                     @if($setting['type'] == 'text')
-                                        <input type="text" class="form-control" name="{{$key}}" value="{{@$configs[$key]}}">
+                                        <input type="text" class="form-control" name="{{$key}}"
+                                               value="{{@$configs[$key]}}">
                                     @endif
                                     @if($setting['type'] == 'img')
                                         <div class="select-img">
                                             <div class="fileinput ck-parent" data-provides="fileinput">
-                                                <div class="fileinput-new thumbnail" style="width: 100px; height: 100px" onclick="selectFileWithCKFinder('{{$key}}')">
-                                                    <img class="ck-thumb" id="{{$key}}" src="{{@$configs[$key] ?? '/media/demos/empty.jpg'}}" alt="">
-                                                    <input class="ck-input {{$key}}" id="{{$key}}_input" type="hidden" name="{{$key}}" value="{{@$configs[$key]}}">
+                                                <div class="fileinput-new thumbnail" style="width: 100px; height: 100px"
+                                                     onclick="selectFileWithCKFinder('{{$key}}')">
+                                                    <img class="ck-thumb" id="{{$key}}"
+                                                         src="{{@$configs[$key] ?? '/media/demos/empty.jpg'}}" alt="">
+                                                    <input class="ck-input {{$key}}" id="{{$key}}_input" type="hidden"
+                                                           name="{{$key}}" value="{{@$configs[$key]}}">
                                                 </div>
                                                 <div class="button-action">
-                                                    <span class="" onclick="deleteImage('{{$key}}')"><i class="icon-xl la la-times-circle-o"></i></span>
+                                                    <span class="" onclick="deleteImage('{{$key}}')"><i
+                                                            class="icon-xl la la-times-circle-o"></i></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -111,16 +110,20 @@
     <script src="{{asset('js/pages/features/miscellaneous/sweetalert2.js')}}"></script>
     <script src="{{asset('js\pages\crud\forms\widgets\bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('plugins/custom/jQuery-Mask-Plugin-master/disk/jquery.mask.js')}}"></script>
-    @if(Session::has('message'))
-        <script>
-            $(document).ready(function () {
-                Swal.fire({
-                    icon: "success",
-                    title: "{{Session::pull('message')}}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            })
-        </script>
-    @endif
+    <script>
+        $(document).ready(function () {
+            $('#submit_form').html(
+                '<button type="button" class="btn-shadow-hover font-weight-bold mr-2 btn btn-light-success"> <i class="flaticon2-checkmark"></i>Cập nhật</button>'
+            )
+        })
+        $('#submit_form').on('click', function () {
+            $('#formMain').submit();
+        })
+        @if(session()->has('message'))
+        $(document).ready(function () {
+            toastr.success("{{ session()->pull('message') }}")
+        })
+        @endif
+    </script>
+
 @endsection

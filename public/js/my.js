@@ -32,10 +32,11 @@ function formatDate(date) {
     return `${year}-${month}-${day}  ${hours}:${minutes}`;
 }
 
-function getSegment(index,array =  window.location.pathname.split('/')){
-    array.splice(0,1);
+function getSegment(index, array = window.location.pathname.split('/')) {
+    array.splice(0, 1);
     return array[index];
 }
+
 toastr.options = {
     "closeButton": false,
     "debug": false,
@@ -61,7 +62,14 @@ function setDataTable(route) {
         processing: true,
         serverSide: true,
         destroy: true,
+        lengthMenu: [
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, 'Tất cả'],
+        ],
         ajax: route,
+        language: {
+            url: '/plugins/custom/datatables/i18n/vietnam.json',
+        },
         columns: [
             {
                 data: null,
@@ -78,7 +86,7 @@ function setDataTable(route) {
             {
                 data: 'title',
                 title: 'Tiêu đề',
-                render:function (data, type, row) {
+                render: function (data, type, row) {
                     return `<p class="row-title">${row.title}</p>`
                 }
             },
@@ -87,7 +95,7 @@ function setDataTable(route) {
                 render: function (data, type, row) {
                     var temp = "";
                     $.each(row.groups, function (index, value) {
-                            temp += "<span class=\"label label-pill label-inline label-center mr-2  label-primary \">" + value.title + "</span><br />";
+                        temp += "<span class=\"label label-pill label-inline label-center mr-2  label-primary \">" + value.title + "</span><br />";
                     });
                     return temp;
                 }
@@ -95,7 +103,7 @@ function setDataTable(route) {
             {
                 data: 'image', title: 'Hình ảnh', orderable: false, searchable: false,
                 render: function (data, type, row) {
-                        return `<img class="image-item" src="${row.image || '/media/demos/empty.jpg'}" >`;
+                    return `<img class="image-item" src="${row.image || '/media/demos/empty.jpg'}" >`;
                 }
             },
             {data: 'order', title: 'Thứ tự'},
@@ -127,12 +135,12 @@ function setDataTable(route) {
                 render: function (data, type, row) {
                     let html = '';
                     let module_is_group = module.indexOf('-group') > 0;
-                    if (module_is_group){
-                       // là group
+                    if (module_is_group) {
+                        // là group
                         html += `<a href="/admin/${module}/${row.id}/edit" class="btn btn-sm btn-clean btn-icon mr-2"><span class="svg-icon svg-icon-md"><i class="far fa-edit"></i></span></a>`;
                         html += `<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#items_in_group" onclick="setItemInGroupModal(${row.id})"><span class="svg-icon svg-icon-md"><i class="fas fa-list-ul"></i></span></button>`;
                         html += `<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteGroup(${row.id})"><span class="svg-icon svg-icon-md"><i class="fas fa-trash"></i></span></button>`;
-                    }else {
+                    } else {
                         // là item
                         html += '<a href="/admin/' + module + '/' + row.id + '/edit" class="btn btn-sm btn-clean btn-icon mr-2" target="_blank"><span class="svg-icon svg-icon-md"><i class="far fa-edit\n"></i></span></a>';
                         html += '<button class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="modal" data-target="#confirm_delete" onclick="deleteItem(' + row.id + ')"><span class="svg-icon svg-icon-md"><i class="fas fa-trash\n"></i></span></button>';
@@ -144,19 +152,10 @@ function setDataTable(route) {
                 }
             }
         ],
-        language: {
-            "lengthMenu": "Hiển thị _MENU_ bản ghi",
-            "sSearch":"Tìm kiếm:",
-            "zeroRecords": "Không tìm thấy gì.",
-            "info": "Đang hiển thị trang _PAGE_ / _PAGES_",
-            "infoEmpty": "Không có bản ghi nào.",
-            "oPaginate":{
-                "sNext":"Sau",
-                "sPrevious": "Trước",
-            }
-        }
     });
-    $('.sorting:first').trigger('click');
+    $(document).ready(function () {
+        $('.sorting:first').trigger('click');
+    });
 }
 
 function selectAllItem() {

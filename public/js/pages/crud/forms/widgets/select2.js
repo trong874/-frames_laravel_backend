@@ -3,33 +3,21 @@ var KTSelect2 = function() {
     // Private functions
     var demos = function() {
         // basic
-        $('#kt_select2_1, #kt_select2_1_validate,#category_id').select2({
-            placeholder: 'Select a state',
-            allowClear: true
+        $('.select2.select2-basic').select2({
+            placeholder: 'Lựa chọn.',
+            allowClear: true,
+            language: {
+                "noResults": function () {
+                    return "Không tìm thấy gì.";
+                },
+            }
         });
-
-        // nested
-        $('#kt_select2_2, #kt_select2_2_validate').select2({
-            placeholder: 'Select a state'
-        });
-
-        // multi select
-        $('#kt_select2_3, #kt_select2_3_validate').select2({
-            placeholder: 'Chọn danh mục',
-        });
-        $('#size-product, #kt_select2_3_validate').select2({
+        $('#size-product').select2({
             placeholder: 'Size của sản phẩm',
         });
-        $('#color-product, #kt_select2_3_validate').select2({
+        $('#color-product').select2({
             placeholder: 'Màu sắc của sản phẩm',
         });
-
-        // basic
-        $('#kt_select2_4').select2({
-            placeholder: "Select a state",
-            allowClear: true
-        });
-
         //position
         $('#group_id_input').select2({
             placeholder: 'Chọn danh mục',

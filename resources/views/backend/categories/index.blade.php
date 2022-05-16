@@ -187,12 +187,7 @@
                     success: function (res) {
                         if(res.status == 'success'){
                             $(document).ready(function () {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: res.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
+                                toastr.success(res.message);
                             })
                             setTimeout(function () {
                                 location.reload();
@@ -208,6 +203,7 @@
                 });
             }
         });
+
     </script>
 @endsection
 

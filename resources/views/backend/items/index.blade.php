@@ -34,7 +34,7 @@
                     <div class="col-md-4">
                         <div class="form-group container">
                             <span class="form-label">Danh mục</span>
-                            <select class="form-control select2" id="category_id" name="category_id">
+                            <select class="form-control select2 select2-basic" name="category_id">
                                 <option label="Label"></option>
                                 <?php get_option_categories($categories)  ?>
                             </select>
@@ -167,8 +167,7 @@
     @endif
     <!-- App scripts -->
     <script>
-        setDataTable({url:'{!! route('ajax_get_item',$module) !!}'})
-
+        setDataTable({url:'{!! route('ajax_get_item',$module) !!}'});
         function deleteItem(item_id) {
             document.getElementById('form_delete').action = '/admin/{{$module}}/' + item_id;
         }

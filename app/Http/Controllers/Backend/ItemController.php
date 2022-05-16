@@ -273,6 +273,12 @@ class ItemController extends Controller
         try {
             $items = $request->list;
             $group_id = $request->group_id;
+            if (find_key($items,'children')){
+                return response()->json([
+                    'status'=>0,
+                    'message'=>'Vị trí sắp xếp không hợp hệ'
+                ]);
+            }
             $group = Group::query()->findOrFail($group_id);
             $group->items()->detach();
             foreach ($items as $key => $item){
@@ -280,9 +286,12 @@ class ItemController extends Controller
                 $inter = Group_Item::query()->where('group_id',$group_id)->where('item_id',$item['id'])->first();
                 $inter->update(['order'=> $key]);
             }
-            return response()->json(['message'=>'Cập nhật thứ tự thành công']);
+            return response()->json([
+                'status'=>1,
+                'message'=>'Cập nhật thứ tự thành công'
+            ]);
         }catch (\Exception $e){
-            return $e;
+            return $e->getMessage();
         }
     }
 }

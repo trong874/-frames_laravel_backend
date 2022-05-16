@@ -15,32 +15,7 @@ return [
     ],
     'description'=>[
         'label'=>'Mô tả trang',
-        'type'=>'text',
+        'type'=>'html',
     ],
-    'link-youtube'=>[
-        'label'=>'Link Youtube',
-        'type'=>'text'
-    ],
-    'email'=>[
-        'label'=>'Email',
-        'type'=>'text'
-    ],
-    'phone'=>[
-        'label'=>'Số điện thoại',
-        'type'=>'text',
-    ],
-    'tel'=>[
-        'label'=>'Tel',
-        'type'=>'text'
-    ],
-    'address1'=>[
-        'label'=>'Địa chỉ 1',
-        'type'=>'text'
-    ],
-    'address2'=>[
-        'label'=>'Địa chỉ 2',
-        'type'=>'text'
-    ],
-
 ],
 ];

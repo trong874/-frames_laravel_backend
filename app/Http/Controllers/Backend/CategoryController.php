@@ -99,7 +99,6 @@ class CategoryController extends Controller
             'image_banner'=>$data_category['image_banner'],
             'image_icon'=>$data_category['image_icon'],
             'status'=>$data_category['status'],
-            'created_at'=>$data_category['created_at'],
             'ended_at'=>$data_category['ended_at'],
             'order'=>$data_category['order'],
         ]);

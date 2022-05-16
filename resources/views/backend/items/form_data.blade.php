@@ -41,7 +41,7 @@
                     <div class="form-group row mt-3">
                         <label class="col-lg-2 col-form-label text-right">Danh mục</label>
                         <div class="col-lg-5">
-                            <select class="form-control select2" id="group_id_input" name="group_id[]" multiple="multiple">
+                            <select class="form-control select2 select2-basic" name="group_id[]" multiple="multiple">
                                 <optgroup label="Chọn danh mục">
                                     @if(isset($item))
                                         {{ get_option_old_categories($categories,$item)}}
