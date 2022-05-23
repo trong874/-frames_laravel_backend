@@ -6,90 +6,46 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <style>
-        .scroll {
-            width: 150px;
-            height: 150px;
-            overflow-y: scroll;
-        }
-    </style>
 </head>
 <body>
-<div class="scroll">
-    Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha của nó
-    đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để
-    tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R"
-    trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp
-    đó là thành phần html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base
-    trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size
-    trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính
-    vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc;
-    trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện
-    tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá
-    nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị
-    font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này bằng với bộ font được
-    thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc
-    font size trong div hiện tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá
-    trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên
-    base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này
-    bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong
-    một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra
-    sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì
-    tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt
-    của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần
-    html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha
-    của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn,
-    để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời,
-    "R" trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường
-    hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base
-    trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size
-    trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính
-    vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc;
-    trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện
-    tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá
-    nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị
-    font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này bằng với bộ font được
-    thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc
-    font size trong div hiện tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá
-    trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên
-    base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này
-    bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong
-    một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra
-    sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì
-    tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt
-    của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần
-    html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha
-    của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn,
-    để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời,
-    "R" trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường
-    hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base
-    trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size
-    trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính
-    vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc;
-    trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện
-    tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá
-    nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị
-    font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này bằng với bộ font được
-    thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong một số trường hợp, việc
-    font size trong div hiện tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra sự khó khăn trong quá
-    trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì tốt nhất chúng ta nên
-    base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt của "root"; điều này
-    bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần html.Tuy nhiên trong
-    một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha của nó đôi khi gây ra
-    sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn, để tránh điều này thì
-    tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời, "R" trong rem viết tắt
-    của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường hợp đó là thành phần
-    html.Tuy nhiên trong một số trường hợp, việc font size trong div hiện tại ta đang làm việc base trên font-size cha
-    của nó đôi khi gây ra sự khó khăn trong quá trình làm việc. Có quá nhiều phụ thuộc font-size trong một website lớn,
-    để tránh điều này thì tốt nhất chúng ta nên base trên một giá trị font size duy nhất. Chính vì vậy mà "rem" ra đời,
-    "R" trong rem viết tắt của "root"; điều này bằng với bộ font được thiết lập ở phần tử gốc; trong hầu hết các trường
-    hợp đó là thành phần html.
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<textarea name="" id="text" cols="150" rows="50"></textarea>
+<button id="edit">Edit</button>
 <script>
-    $('.scroll').animate({
-        scrollTop: $(this).prop("scrollHeight"),
-    });
+    function readTextFile(file = '{{asset('css/app.css')}}')
+    {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, false);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    document.getElementById('text').innerHTML = rawFile.responseText;
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+    readTextFile()
+    document.getElementById('edit').addEventListener('click',save);
+
+    function makeTextFile(text) {
+        var data = new Blob([text], {type: 'text/plain'});
+
+        // If we are replacing a previously generated file we need to
+        // manually revoke the object URL to avoid memory leaks.
+        if (textFile !== null) {
+            window.URL.revokeObjectURL(textFile);
+        }
+
+        textFile = window.URL.createObjectURL(data);
+
+        return textFile;
+    }
+function save() {
+
+}
 </script>
 </body>
 </html>

@@ -131,6 +131,7 @@ class CategoryController extends Controller
 
     public function destroyMulti(Request $request)
     {
+
         $ids = $request->ids;
         Group::whereIn('id', explode(",", $ids))->delete();
         return response()->json([
@@ -138,7 +139,6 @@ class CategoryController extends Controller
             'message'=>'Đã xoá !'
         ]);
     }
-
     function changeOrder(Request $list)
     {
         $this->recursive($list->all()['list']);

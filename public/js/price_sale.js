@@ -10,7 +10,6 @@ let display_value = {
 price_old.on('keyup',todo);
 percent_sale.on('keyup',todo);
 
-
 function todo() {
     calc();
     setDisplay()

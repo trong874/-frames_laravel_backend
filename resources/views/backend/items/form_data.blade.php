@@ -272,9 +272,7 @@
                             </div>
                             <div class="col-12 col-md-4">
                                 <label class="form-control-label">Giá khuyến mãi (giá bán còn lại) (đ)</label>
-                                <input type="text" id="price" name="price" value="{{$item->price ?? 0}}"
-                                       placeholder="Giá khuyến mãi (giá bán còn lại) (đ)"
-                                       class="form-control input-price " maxlength="19" onkeypress="return false;">
+                                <input type="text" id="price" name="price" value="{{$item->price ?? 0}}" placeholder="Giá khuyến mãi (giá bán còn lại) (đ)" class="form-control input-price " maxlength="19" onkeypress="return false;">
                             </div>
                         </div>
                         <div class="row">

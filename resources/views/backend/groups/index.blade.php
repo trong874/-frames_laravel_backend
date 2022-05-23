@@ -45,6 +45,7 @@
                     Xác nhận thao tác xóa nhóm
                 </div>
                 <div class="modal-footer">
+
                     <form action="" method="POST" id="form_delete">
                         @csrf
                         @method('delete')
@@ -54,6 +55,7 @@
                         <button type="submit" class="btn btn-danger font-weight-bold">Xóa
                         </button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -119,7 +121,6 @@
         </div>
     </div>
     {{--    end modal modal confirm delete multi record--}}
-
 @endsection
 @section('scripts')
     <!-- DataTables -->
@@ -199,6 +200,8 @@
                             html += `</div>`;
                             if (res.length) {
                                 $('#result_data').html(html);
+                            }else {
+                                $('#result_data').html('');
                             }
                             res.forEach(function (item) {
                                 let html = '<div class="alert alert-custom alert-white shadow-lg fade show">';
@@ -254,7 +257,7 @@
         }
 
         function deleteGroup(group_id) {
-            document.getElementById('form_delete').action = '/admin/{{$module}}/' + group_id;
+            $('#form_delete').attr('action','/admin/{{$module}}/' + group_id);
         }
 
         function setItemInGroupModal(group_id) {
