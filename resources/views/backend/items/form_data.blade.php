@@ -111,16 +111,13 @@
                             <label for="locale">Ảnh đại diện:</label>
                             <div class="position-relative">
                                 <div class="fileinput ck-parent" data-provides="fileinput">
-                                    <div class="fileinput-new thumbnail" style="width: 100px; height: 100px"  onclick="selectFileWithCKFinder('image_avatar')">
-                                        <img class="ck-thumb" id="image_avatar"
-                                             src="{{(isset($item->image))? $item->image : asset('/media/demos/empty.jpg')}}"
-                                             alt="">
-                                        <input class="ck-input" id="image_avatar_input" type="hidden" name="image"
-                                               value="{{@$item->image}}">
+                                    <div class="fileinput-new thumbnail" style="width: 100px; height: 100px"  onclick="selectFileWithCKFinder('.image_avatar')">
+                                        <img class="ck-thumb image_avatar" src="{{(isset($item->image))? $item->image : asset('/media/demos/empty.jpg')}}" alt="">
+                                        <input class="ck-input image_avatar" type="hidden" name="image" value="{{@$item->image}}">
 
                                     </div>
                                     <div class="button-action">
-                                        <span class="" onclick="deleteImage('image_avatar')"><i class="icon-xl la la-times-circle-o"></i></span>
+                                        <span class="" onclick="deleteImage('.image_avatar')"><i class="icon-xl la la-times-circle-o"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -160,43 +157,36 @@
                             <label for="locale">Ảnh Banner:</label>
                             <div class="position-relative">
                                 <div class="fileinput ck-parent" data-provides="fileinput">
-                                    <div class="fileinput-new thumbnail" style="width: 100px; height: 100px" onclick="selectFileWithCKFinder('image_banner')">
+                                    <div class="fileinput-new thumbnail" style="width: 100px; height: 100px" onclick="selectFileWithCKFinder('.image_banner')">
 
-                                        <img class="ck-thumb" id="image_banner"
-                                             src="{{(isset($item->image_banner))? $item->image_banner : asset('/media/demos/empty.jpg')}}"
+                                        <img class="ck-thumb image_banner" src="{{(isset($item->image_banner))? $item->image_banner : asset('/media/demos/empty.jpg')}}"
                                              alt="">
-                                        <input class="ck-input image_banner" id="image_banner_input" type="hidden"
-                                               name="image_banner" value="{{@$item->image_banner}}">
-
+                                        <input class="ck-input image_banner" type="hidden" name="image_banner" value="{{@$item->image_banner}}">
                                     </div>
                                     <div class="button-action">
-                                        <span class="" onclick="deleteImage('image_banner')"><i class="icon-xl la la-times-circle-o"></i></span>
+                                        <span class="" onclick="deleteImage('.image_banner')"><i class="icon-xl la la-times-circle-o"></i></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-
                         <div class="col-md-4">
                             <label for="locale">Ảnh icon:</label>
                             <div class="position-relative">
                                 <div class="fileinput ck-parent" data-provides="fileinput">
-                                    <div class="fileinput-new thumbnail" style="width: 100px; height: 100px" onclick="selectFileWithCKFinder('image_icon')">
-                                        <img class="ck-thumb" id="image_icon"
-                                             src="{{(isset($item->image_icon))? $item->image_icon : asset('/media/demos/empty.jpg')}}"
+                                    <div class="fileinput-new thumbnail" style="width: 100px; height: 100px" onclick="selectFileWithCKFinder('.image_icon')">
+                                        <img class="ck-thumb image_icon" src="{{(isset($item->image_icon))? $item->image_icon : asset('/media/demos/empty.jpg')}}"
                                              alt="">
                                         <input class="ck-input image_icon" id="image_icon_input" type="hidden"
                                                name="image_icon" value="{{@$item->image_icon}}">
 
                                     </div>
                                     <div class="button-action">
-                                        <span class="" onclick="deleteImage('image_icon')"><i class="icon-xl la la-times-circle-o"></i></span>
+                                        <span class="" onclick="deleteImage('.image_icon')"><i class="icon-xl la la-times-circle-o"></i></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
 
@@ -213,18 +203,15 @@
                         <div class="form-group">
                             <label>Trạng thái</label>
                             <select name="status" class="form-control">
-                                <option value="1" {{(isset($item) && $item->status == 1) ? 'selected' : '' }}> Hoạt động
-                                </option>
-                                <option value="0" {{(isset($item) && $item->status == 0) ? 'selected' : '' }}>Ngừng hoạt
-                                    động
-                                </option>
+                                <option value="1" {{(isset($item) && $item->status == 1) ? 'selected' : '' }}> Hoạt động</option>
+                                <option value="0" {{(isset($item) && $item->status == 0) ? 'selected' : '' }}>Ngừng hoạt động</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Ngày hết hạn</label>
                             <div class="input-group date" id="kt_datetimepicker_2" data-target-input="nearest">
                                 <input type="text" name="ended_at" class="form-control datetimepicker-input"
-                                       data-target="#kt_datetimepicker_2" value="{{@$item->ended_at}}"
+                                       data-target="#kt_datetimepicker_2" value="{{ @$item->ended_at }}"
                                        placeholder="Ngày hết hạn" data-toggle="datetimepicker">
                                 <div class="input-group-append" data-target="#kt_datetimepicker_2"
                                      data-toggle="datetimepicker">
@@ -453,7 +440,7 @@
     <script src="{{asset('js\pages\crud\forms\widgets\bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('plugins/custom/jQuery-Mask-Plugin-master/disk/jquery.mask.js')}}"></script>
     <script src="{{asset('js/price_sale.js')}}"></script>
-
+    <script src="{{ asset('js/sub-item.js') }}"></script>
     @if(Session::has('message'))
         <script>
             toastr.success("{{session()->pull('message')}}");
@@ -470,58 +457,5 @@
         })
     </script>
     <script>
-        function addOptionItem() {
-            let countRow = document.getElementById('table_attribute_item').childElementCount - 1;
-            let table_attribute = document.getElementById('table_attribute_item');
-            table_attribute.insertAdjacentHTML('beforeend', ' <tbody id="row_' + countRow + '">\n' +
-                '                                    <tr data-index_el="0">\n' +
-                '                                        <th rowspan="1"><input type="text" value="" class="form-control attribute_' + countRow + '" placeholder="Màu sắc, Size..." onkeyup="setNameInputSub(this.value,' + countRow + ');this.name = `attribute[${this.value}]`" required></th>\n' +
-                '                                        <td><input type="text" class="form-control sub_item_' + countRow + '_0" placeholder="Xanh, vàng đỏ..." onkeyup="setNameInputOption(this.value,' + countRow + ',0);"></td>\n' +
-                '                                        <td><input type="text" class="form-control price_subitem_' + countRow + '_0"></td>\n' +
-                '                                        <td><input type="text" class="form-control qty_subitem_' + countRow + '_0"></td>\n' +
-                '                                        <td><button type="button" class="btn btn-sm btn-danger" disabled>Xoá</button></td>\n' +
-                '                                        <td rowspan="1" style="height: 0" class="action_option">\n' +
-                '                                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteOption(' + countRow + ')"><i class="far fa-trash-alt"></i></button>\n' +
-                '                                            <br>\n' +
-                '                                            <button type="button" class="btn btn-sm btn-success add_row_in_option" onclick="addRowInOption(' + countRow + ')"><i class="fas fa-plus"></i></button>\n' +
-                '                                        </td>\n' +
-                '                                    </tr>\n' +
-                '                                    </tbody>')
-        }
-
-        function setNameInputSub(value, count_row) {
-            $(`input.sub_item_${count_row}`).attr('name', `attribute[${value}]`);
-        }
-
-        function setNameInputOption(value, count_row, count_row_in_option) {
-            let name_attribute = $(`input.attribute_${count_row}`).attr('name')
-            $(`input.sub_item_${count_row}_${count_row_in_option}`).attr('name', name_attribute + '[' + value + ']')
-            $(`input.price_subitem_${count_row}_${count_row_in_option}`).attr('name', name_attribute + '[' + value + '][price]')
-            $(`input.qty_subitem_${count_row}_${count_row_in_option}`).attr('name', name_attribute + '[' + value + '][qty]')
-        }
-
-        function addRowInOption(row_id) {
-            let row = document.getElementById(`row_${row_id}`)
-            let last_index = $(`#row_${row_id}`).children().last().attr('data-index_el');
-            let latest_index = ++last_index;
-            row.insertAdjacentHTML('beforeend', '<tr data-index_el="' + latest_index + '">\n' +
-                '                                        <td><input type="text" class="form-control sub_item_' + row_id + '_' + latest_index + '" placeholder="Xanh,vàng,đỏ..." onkeyup="setNameInputOption(this.value,' + row_id + ',' + latest_index + ')"></td>\n' +
-                '                                        <td><input type="text" class="form-control price_subitem_' + row_id + '_' + latest_index + '"></td>\n' +
-                '                                        <td><input type="text" class="form-control qty_subitem_' + row_id + '_' + latest_index + '"></td>\n' +
-                '                                        <td><button type="button" class="btn btn-sm btn-danger" onclick="deleteRowInOption(this)">Xoá</button></td>\n' +
-                '                                    </tr>');
-            let rowspan = $(`#row_${row_id} tr th`).attr('rowspan');
-            $(`#row_${row_id} tr th`).attr('rowspan', ++rowspan)
-            $(`#row_${row_id} tr .action_option`).attr('rowspan', rowspan)
-        }
-
-        function deleteOption(row_id) {
-            document.getElementById(`row_${row_id}`).remove();
-        }
-
-        function deleteRowInOption(btn_delete) {
-            let row_in_option = btn_delete.parentElement.parentElement
-            row_in_option.remove();
-        }
     </script>
 @endsection

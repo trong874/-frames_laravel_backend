@@ -122,6 +122,7 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         $data_item = $request->all();
+        dd($data_item);
         $item = Item::with('groups')->findOrFail($id);
 //        if (isset($data_item['attribute'])) {
 //            foreach ($item->item_attributes as $attribute) {

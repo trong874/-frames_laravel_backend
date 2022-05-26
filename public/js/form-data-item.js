@@ -89,11 +89,11 @@ $(".ck-popup-multiply").click(function (e) {
         }
     });
 });
-function deleteImage(elementId) {
-    document.getElementById(elementId).src = '/media/demos/empty.jpg';
-    document.getElementById(elementId+'_input').value = '';
+function deleteImage(selector) {
+    document.querySelector(`img${selector}`).src = '/media/demos/empty.jpg';
+    document.querySelector(`input${selector}`).value = '';
 }
-function selectFileWithCKFinder(elementId) {
+function selectFileWithCKFinder(selector) {
     CKFinder.modal({
         chooseFiles: true,
         width: 800,
@@ -101,13 +101,14 @@ function selectFileWithCKFinder(elementId) {
         onInit: function (finder) {
             finder.on('files:choose', function (evt) {
                 var file = evt.data.files.first();
-                var output = document.getElementById(elementId);
-                output.src = file.getUrl();
-                document.getElementById(elementId + '_input').value = file.getUrl();
+                var img = document.querySelector(`img${selector}`);
+                var input = document.querySelector(`input${selector}`);
+                img.src = file.getUrl();
+                input.value = file.getUrl();
             });
 
             finder.on('file:choose:resizedImage', function (evt) {
-                var output = document.getElementById(elementId);
+                var output = document.querySelector(selector);
                 output.value = evt.data.resizedUrl;
             });
         }
